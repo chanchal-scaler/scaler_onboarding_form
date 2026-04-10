@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/mentee-onboarding/',
   plugins: [react()],
+  preview: {
+    allowedHosts: ['.up.railway.app', 'scaler.com', 'www.scaler.com'],
+  },
 })
