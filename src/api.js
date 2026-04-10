@@ -8,6 +8,32 @@ const ONBOARDING_COMPLETED_TRACKING_PATH =
   "/api/v3/action-trackings/mentee_completed_onboarding";
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
+function getCookieValue(name) {
+  if (typeof document === "undefined") return null;
+  const escapedName = name.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
+  const match = document.cookie.match(new RegExp(`(?:^|; )${escapedName}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function buildHeaders(method, customHeaders = {}) {
+  const headers = {
+    "Content-Type": "application/json",
+    ...customHeaders,
+  };
+  const normalizedMethod = String(method || "GET").toUpperCase();
+  const requiresCsrf = !["GET", "HEAD", "OPTIONS"].includes(normalizedMethod);
+
+  if (requiresCsrf) {
+    const csrfToken = getCookieValue("XSRF-TOKEN");
+    if (csrfToken) {
+      headers["X-CSRF-Token"] = csrfToken;
+    }
+    headers["X-Requested-With"] = "XMLHttpRequest";
+  }
+
+  return headers;
+}
+
 function toUrl(path) {
   if (!API_BASE_URL) {
     return path;
@@ -16,12 +42,10 @@ function toUrl(path) {
 }
 
 async function apiFetch(path, options = {}) {
+  const method = options.method || "GET";
   const response = await fetch(toUrl(path), {
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers: buildHeaders(method, options.headers || {}),
     ...options,
   });
 
