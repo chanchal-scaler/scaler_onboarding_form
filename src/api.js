@@ -6,6 +6,7 @@ const FORM_GROUP_PATH =
 const FORM_SUBMIT_PATH = "/api/v3/interviewbit_form_responses";
 const ONBOARDING_COMPLETED_TRACKING_PATH =
   "/api/v3/action-trackings/mentee_completed_onboarding";
+const GENERATE_JWT_PATH = "/generate-jwt";
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 function getCookieValue(name) {
@@ -15,11 +16,56 @@ function getCookieValue(name) {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-function buildHeaders(method, customHeaders = {}) {
+function extractToken(payload) {
+  if (!payload || typeof payload !== "object") return null;
+  return (
+    payload.token ||
+    payload.jwt ||
+    payload.access_token ||
+    payload?.data?.token ||
+    payload?.data?.jwt ||
+    payload?.data?.access_token ||
+    null
+  );
+}
+
+async function resolveAuthToken() {
+  try {
+    const csrfToken = getCookieValue("XSRF-TOKEN");
+    const response = await fetch(toUrl(GENERATE_JWT_PATH), {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+    if (response.status === 401 || response.status === 403) return null;
+    if (!response.ok) return null;
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) return null;
+    const payload = await response.json();
+    const jwtToken = extractToken(payload);
+    if (jwtToken) return jwtToken;
+  } catch {
+    // Fallback to cookie token for environments where /generate-jwt is unavailable.
+  }
+
+  const cookieToken = getCookieValue("access_token");
+  if (cookieToken) return cookieToken;
+
+  return null;
+}
+
+function buildHeaders(method, customHeaders = {}, authToken = null) {
   const headers = {
     "Content-Type": "application/json",
     ...customHeaders,
   };
+  if (authToken) {
+    headers.Authorization = headers.Authorization || `Bearer ${authToken}`;
+    headers["X-User-Token"] = headers["X-User-Token"] || authToken;
+  }
   const normalizedMethod = String(method || "GET").toUpperCase();
   const requiresCsrf = !["GET", "HEAD", "OPTIONS"].includes(normalizedMethod);
 
@@ -43,9 +89,10 @@ function toUrl(path) {
 
 async function apiFetch(path, options = {}) {
   const method = options.method || "GET";
+  const authToken = await resolveAuthToken();
   const response = await fetch(toUrl(path), {
     credentials: "include",
-    headers: buildHeaders(method, options.headers || {}),
+    headers: buildHeaders(method, options.headers || {}, authToken),
     ...options,
   });
 
