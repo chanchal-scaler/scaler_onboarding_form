@@ -13,6 +13,26 @@ export function fetchInitialLoadData() {
   return apiFetch(INITIAL_LOAD_DATA_PATH);
 }
 
+function isMenteeCompletedOnboardingTracking(response) {
+  if (!response) return false;
+  const data = response?.data;
+  const attrs = data?.attributes;
+  return (
+    data?.type === "action_tracking" &&
+    attrs?.action_type === "mentee_completed_onboarding"
+  );
+}
+
+/** Initial dashboard load, then completion tracking (GET must actually hit the network; JWT is optional via optionalAuth). */
+export async function fetchInitialLoadWithCompletionDecision() {
+  const initialLoadData = await fetchInitialLoadData();
+  const trackingResponse = await fetchOnboardingCompletionTracking().catch(() => null);
+  return {
+    initialLoadData,
+    initialShowTimeline: isMenteeCompletedOnboardingTracking(trackingResponse),
+  };
+}
+
 export function fetchOnboardingFormGroup() {
   return apiFetch(FORM_GROUP_PATH);
 }
@@ -45,6 +65,16 @@ async function submitFormResponses(payload) {
   return response.json();
 }
 
-export function trackOnboardingCompleted() {
-  return apiFetch(ONBOARDING_COMPLETED_TRACKING_PATH, { method: "GET" });
+export async function fetchOnboardingCompletionTracking() {
+  try {
+    return await apiFetch(ONBOARDING_COMPLETED_TRACKING_PATH, {
+      method: "GET",
+      /** Without this, missing JWT made apiFetch throw before fetch() — no request in Network. */
+      optionalAuth: true,
+    });
+  } catch (error) {
+    const message = String(error?.message || "");
+    if (message.includes("Request failed (404)")) return null;
+    throw error;
+  }
 }

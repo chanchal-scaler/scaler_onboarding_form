@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchInitialLoadData, fetchOnboardingFormGroup } from "../api";
-import { normalizeFormGroup } from "../formSchema";
+import { fetchInitialLoadWithCompletionDecision, fetchOnboardingFormGroup } from "../api";
+import { normalizeFormGroup, getTimelineFloatingLabels } from "../formSchema";
 import { oneTimeFetchOptions } from "../constants/queryOptions";
 
 export function useOnboardingData() {
   const initialQuery = useQuery({
-    queryKey: ["initial-load-data"],
-    queryFn: fetchInitialLoadData,
+    queryKey: ["initial-load-and-tracking"],
+    queryFn: fetchInitialLoadWithCompletionDecision,
     ...oneTimeFetchOptions,
   });
 
@@ -22,10 +22,21 @@ export function useOnboardingData() {
     [formGroupQuery.data],
   );
 
+  const timelineFloatingCta = useMemo(
+    () => getTimelineFloatingLabels(normalized.screens, normalized.formGroupMeta),
+    [normalized.screens, normalized.formGroupMeta],
+  );
+
+  const initialLoadData = initialQuery.data?.initialLoadData;
+
   return {
-    user: initialQuery.data?.user_data?.current_user,
+    user: initialLoadData?.user_data?.current_user,
+    /** True when `/api/v3/action-trackings/mentee_completed_onboarding` returned a completed record (decided with initial load only). */
+    initialShowTimeline: initialQuery.data?.initialShowTimeline ?? false,
     screens: normalized.screens,
     formGroupLabel: normalized.formGroupLabel,
+    formGroupMeta: normalized.formGroupMeta,
+    timelineFloatingCta,
     isLoading: initialQuery.isLoading || formGroupQuery.isLoading,
     error: initialQuery.error || formGroupQuery.error,
   };

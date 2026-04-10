@@ -22,16 +22,19 @@ function buildHeaders(method, customHeaders = {}, authToken = null) {
 
 export async function apiFetch(path, options = {}) {
   const method = options.method || "GET";
+  const optionalAuth = options.optionalAuth === true;
   const tokenRequired = requiresTokenAuth(path);
   let authToken = tokenRequired ? await resolveAuthToken() : null;
-  if (tokenRequired && !authToken) {
+  if (tokenRequired && !authToken && !optionalAuth) {
     throw new AuthError("Could not generate auth token from /generate-jwt. Please log in and try again.", 401);
   }
 
+  const { optionalAuth: _omitOptionalAuth, headers: optionHeaders, ...restFetchOptions } = options;
+
   let response = await fetch(toUrl(path), {
     credentials: "include",
-    headers: buildHeaders(method, options.headers || {}, authToken),
-    ...options,
+    headers: buildHeaders(method, optionHeaders || {}, authToken),
+    ...restFetchOptions,
   });
 
   if ((response.status === 401 || response.status === 403) && tokenRequired) {
@@ -40,8 +43,8 @@ export async function apiFetch(path, options = {}) {
     if (authToken) {
       response = await fetch(toUrl(path), {
         credentials: "include",
-        headers: buildHeaders(method, options.headers || {}, authToken),
-        ...options,
+        headers: buildHeaders(method, optionHeaders || {}, authToken),
+        ...restFetchOptions,
       });
     }
   }

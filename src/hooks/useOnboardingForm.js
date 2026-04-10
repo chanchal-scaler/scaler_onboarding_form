@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { submitOnboardingForm, trackOnboardingCompleted } from "../api";
+import { submitOnboardingForm } from "../api";
 import { buildPayload, getDefaultValues } from "../utils/formValues";
 
 export function useOnboardingForm({ screens, formGroupLabel }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [allValues, setAllValues] = useState({});
   const [submitResponse, setSubmitResponse] = useState(null);
-  const [finalSubmitError, setFinalSubmitError] = useState(null);
+  const [isCompleted, setIsCompleted] = useState(false);
   const currentScreen = screens[currentStep] || null;
   const form = useForm({ mode: "onSubmit", defaultValues: {} });
-  const { handleSubmit, reset } = form;
+  const { handleSubmit, reset, getValues } = form;
 
   useEffect(() => {
     if (!currentScreen) return;
@@ -30,27 +30,23 @@ export function useOnboardingForm({ screens, formGroupLabel }) {
 
   const onNext = handleSubmit(async (stepValues) => {
     if (currentStep < screens.length - 1) return saveStep(stepValues, 1);
-    setFinalSubmitError(null);
-    const payload = buildPayload(formGroupLabel, allValues, stepValues);
+    const payload = buildPayload(formGroupLabel, allValues, stepValues, screens);
+    const finalValues = { ...allValues, ...stepValues };
+    setAllValues(finalValues);
 
     try {
       await submitMutation.mutateAsync(payload);
     } catch {
-      // Submission failure is non-blocking for completion tracking and redirect.
+      // Submission failure is non-blocking for marking the flow complete in the UI.
     }
 
-    try {
-      await trackOnboardingCompleted();
-      window.location.assign("https://scaler.com");
-    } catch (error) {
-      setFinalSubmitError(error);
-    }
+    setIsCompleted(true);
   });
 
-  const onBack = handleSubmit((stepValues) => {
+  const onBack = () => {
     if (currentStep === 0) return;
-    saveStep(stepValues, -1);
-  });
+    saveStep(getValues(), -1);
+  };
 
   return {
     form,
@@ -58,7 +54,7 @@ export function useOnboardingForm({ screens, formGroupLabel }) {
     currentScreen,
     allValues,
     submitResponse,
-    finalSubmitError,
+    isCompleted,
     submitMutation,
     onNext,
     onBack,

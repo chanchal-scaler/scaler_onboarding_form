@@ -1,6 +1,7 @@
 export {
   fetchInitialLoadData,
+  fetchInitialLoadWithCompletionDecision,
   fetchOnboardingFormGroup,
+  fetchOnboardingCompletionTracking,
   submitOnboardingForm,
-  trackOnboardingCompleted,
 } from "./api/index";
