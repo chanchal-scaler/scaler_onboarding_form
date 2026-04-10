@@ -8,6 +8,10 @@ const ONBOARDING_COMPLETED_TRACKING_PATH =
   "/api/v3/action-trackings/mentee_completed_onboarding";
 const GENERATE_JWT_PATH = "/generate-jwt";
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const TOKEN_AUTH_PATHS = [
+  FORM_SUBMIT_PATH,
+  ONBOARDING_COMPLETED_TRACKING_PATH,
+];
 
 function getCookieValue(name) {
   if (typeof document === "undefined") return null;
@@ -80,6 +84,10 @@ function buildHeaders(method, customHeaders = {}, authToken = null) {
   return headers;
 }
 
+function requiresTokenAuth(path) {
+  return TOKEN_AUTH_PATHS.some((tokenPath) => path.startsWith(tokenPath));
+}
+
 function toUrl(path) {
   if (!API_BASE_URL) {
     return path;
@@ -89,7 +97,7 @@ function toUrl(path) {
 
 async function apiFetch(path, options = {}) {
   const method = options.method || "GET";
-  const authToken = await resolveAuthToken();
+  const authToken = requiresTokenAuth(path) ? await resolveAuthToken() : null;
   const response = await fetch(toUrl(path), {
     credentials: "include",
     headers: buildHeaders(method, options.headers || {}, authToken),
