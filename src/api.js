@@ -12,6 +12,7 @@ const TOKEN_AUTH_PATHS = [
   FORM_SUBMIT_PATH,
   ONBOARDING_COMPLETED_TRACKING_PATH,
 ];
+let userLoginTokenCache = null;
 
 function getCookieValue(name) {
   if (typeof document === "undefined") return null;
@@ -34,6 +35,8 @@ function extractToken(payload) {
 }
 
 async function resolveAuthToken() {
+  if (userLoginTokenCache) return userLoginTokenCache;
+
   try {
     const csrfToken = getCookieValue("XSRF-TOKEN");
     const response = await fetch(toUrl(GENERATE_JWT_PATH), {
@@ -126,7 +129,13 @@ async function apiFetch(path, options = {}) {
 }
 
 export function fetchInitialLoadData() {
-  return apiFetch(INITIAL_LOAD_DATA_PATH);
+  return apiFetch(INITIAL_LOAD_DATA_PATH).then((data) => {
+    const loginToken = data?.user_data?.current_user?.login_token;
+    if (loginToken) {
+      userLoginTokenCache = loginToken;
+    }
+    return data;
+  });
 }
 
 export function fetchOnboardingFormGroup() {
