@@ -40,17 +40,12 @@ export async function resolveAuthToken() {
         },
       });
       if (response.status === 401 || response.status === 403 || !response.ok) return null;
-      const contentType = response.headers.get("content-type") || "";
-      let payload = null;
-
-      if (contentType.includes("application/json")) {
-        payload = await response.json();
-      } else {
-        // Some environments return the JWT as plain text.
-        const raw = (await response.text()).trim();
-        payload = raw.startsWith("\"") && raw.endsWith("\"")
-          ? raw.slice(1, -1)
-          : raw;
+      const rawText = (await response.text()).trim();
+      let payload = rawText;
+      try {
+        payload = JSON.parse(rawText);
+      } catch {
+        payload = rawText;
       }
 
       const jwtToken = extractToken(payload);
