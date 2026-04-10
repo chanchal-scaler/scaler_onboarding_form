@@ -41,8 +41,18 @@ export async function resolveAuthToken() {
       });
       if (response.status === 401 || response.status === 403 || !response.ok) return null;
       const contentType = response.headers.get("content-type") || "";
-      if (!contentType.includes("application/json")) return null;
-      const payload = await response.json();
+      let payload = null;
+
+      if (contentType.includes("application/json")) {
+        payload = await response.json();
+      } else {
+        // Some environments return the JWT as plain text.
+        const raw = (await response.text()).trim();
+        payload = raw.startsWith("\"") && raw.endsWith("\"")
+          ? raw.slice(1, -1)
+          : raw;
+      }
+
       const jwtToken = extractToken(payload);
       if (jwtToken) generatedJwtCache = jwtToken;
       return jwtToken;
