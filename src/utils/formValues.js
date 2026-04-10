@@ -7,8 +7,12 @@ export function getDefaultValues(fields, allValues) {
 
 function serializeResponseValue(value) {
   if (Array.isArray(value)) {
-    return value.map((item) => String(item)).join(",");
+    return value
+      .flatMap((item) => (Array.isArray(item) ? item : [item]))
+      .map((item) => serializeResponseValue(item))
+      .join(",");
   }
+  if (typeof value === "object" && value !== null) return JSON.stringify(value);
   if (value == null) return "";
   return String(value);
 }
