@@ -134,7 +134,12 @@ export function StepForm({
             screen.fields.map((field) => renderFieldRow(field, false))
           )}
           <div className="cta-row field full cta-row--form">
-            <button className="button" type="submit" disabled={isSubmitting}>
+            <button
+              className="button"
+              type="submit"
+              data-track-id={`form_primary_submit_${screen.id}`}
+              disabled={isSubmitting}
+            >
               {actionLabel} {!isSubmitting ? <i className="ph ph-arrow-right" aria-hidden /> : null}
             </button>
             <p className="status-line">

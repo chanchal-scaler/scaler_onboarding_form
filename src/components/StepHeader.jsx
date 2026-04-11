@@ -14,7 +14,13 @@ export function StepHeader({ currentStep, totalSteps, onBack, stepName }) {
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <button className="back-link" type="button" onClick={onBack} aria-label="Go back">
+        <button
+          className="back-link"
+          type="button"
+          data-track-id={`form_header_back_step_${currentStep}`}
+          onClick={onBack}
+          aria-label="Go back"
+        >
           <i className="ph ph-arrow-left" aria-hidden />
         </button>
         <div className="step-meta">

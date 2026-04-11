@@ -331,6 +331,7 @@ export function TimelineScreen({ primaryCtaText = "Start this journey" }) {
                     stepRefs.current[index] = el;
                   }}
                   data-milestone-id={milestone.id}
+                  data-track-id={milestone.expandable ? `roadmap_milestone_toggle_${milestone.id}` : undefined}
                   className={`roadmap-step ${milestone.side} ${milestone.expandable ? "roadmap-step--expandable" : "roadmap-step--static"} ${isOpen ? "is-open" : ""}`}
                   data-expandable={milestone.expandable ? "true" : undefined}
                   role={milestone.expandable ? "button" : undefined}
@@ -360,6 +361,7 @@ export function TimelineScreen({ primaryCtaText = "Start this journey" }) {
       <div className="floating-actions" role="region" aria-label="Roadmap actions">
         <a
           className="roadmap-float-btn roadmap-float-btn--primary"
+          data-track-id="roadmap_primary_cta_external"
           href={import.meta.env.VITE_ROADMAP_JOURNEY_URL || "https://www.scaler.com"}
           target="_blank"
           rel="noreferrer"

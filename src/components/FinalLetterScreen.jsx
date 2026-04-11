@@ -191,6 +191,7 @@ export function FinalLetterScreen({ user, onContinue, continueDisabled = false }
             <button
               className="button"
               type="button"
+              data-track-id="letter_continue_to_roadmap"
               onClick={onContinue}
               disabled={continueDisabled}
             >

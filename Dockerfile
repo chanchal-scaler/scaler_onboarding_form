@@ -7,9 +7,12 @@ RUN npm ci --include=optional
 
 COPY . .
 
-# Turnstile site key is inlined at build time; Railway passes it as a build arg.
+# Vite env vars are inlined at build time; pass as docker build args (e.g. Railway).
 ARG VITE_TURNSTILE_SITE_KEY
 ENV VITE_TURNSTILE_SITE_KEY=$VITE_TURNSTILE_SITE_KEY
+
+ARG VITE_MIXPANEL_TOKEN
+ENV VITE_MIXPANEL_TOKEN=$VITE_MIXPANEL_TOKEN
 
 RUN npm run build
 

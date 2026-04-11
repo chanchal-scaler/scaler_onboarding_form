@@ -42,7 +42,12 @@ export function HomeScreen({ onStart }) {
                 </div>
               </div>
               <div className="cta-row">
-                <button className="button" type="button" onClick={onStart}>
+                <button
+                  className="button"
+                  type="button"
+                  data-track-id="home_start_onboarding"
+                  onClick={onStart}
+                >
                   Complete onboarding <i className="ph ph-arrow-right" aria-hidden />
                 </button>
                 <div className="status-line">

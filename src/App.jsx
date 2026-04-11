@@ -1,5 +1,5 @@
 import "./App.css";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { StepHeader } from "./components/StepHeader";
 import { StepForm } from "./components/StepForm";
@@ -15,6 +15,7 @@ import { useOnboardingForm } from "./hooks/useOnboardingForm";
 import { isAuthError } from "./authError";
 import { fetchExpectationFormDetail } from "./api/expectationForm";
 import { oneTimeFetchOptions } from "./constants/queryOptions";
+import { registerUserContext, trackScreenView } from "./analytics/mixpanel.js";
 
 function App() {
   const {
@@ -45,6 +46,42 @@ function App() {
     enabled: Boolean(expectationSlug),
     ...oneTimeFetchOptions,
   });
+
+  const analyticsPhase = useMemo(() => {
+    if (isLoading) return "loading";
+    if (error) return isAuthError(error) ? "auth_error" : "error";
+    const awaitingBranch =
+      onboarding.isCompleted &&
+      Boolean(expectationSlug) &&
+      (expectationQuery.isLoading || expectationQuery.isFetching) &&
+      phase === "form";
+    if (awaitingBranch) return "awaiting_expectation_branch";
+    return phase;
+  }, [
+    isLoading,
+    error,
+    phase,
+    onboarding.isCompleted,
+    expectationSlug,
+    expectationQuery.isLoading,
+    expectationQuery.isFetching,
+  ]);
+
+  useEffect(() => {
+    registerUserContext(user ?? null);
+  }, [user]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-app-phase", analyticsPhase);
+    const extras = {};
+    if (analyticsPhase === "form" && onboarding.currentScreen) {
+      extras.form_screen_id = onboarding.currentScreen.id;
+      extras.form_step_index = onboarding.currentStep;
+      const sn = onboarding.currentScreen.stepName?.trim();
+      if (sn) extras.form_step_name = sn;
+    }
+    trackScreenView(analyticsPhase, extras);
+  }, [analyticsPhase, onboarding.currentStep, onboarding.currentScreen?.id]);
 
   /** After the last form step: expectation (if required) → letter → timeline */
   useEffect(() => {

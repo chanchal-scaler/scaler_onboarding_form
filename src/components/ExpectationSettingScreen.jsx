@@ -68,10 +68,20 @@ function SignatureModal({ open, initialName, onClose, onConfirm }) {
           Enrolment Agreement&quot; document.
         </p>
         <div className="es-modal__footer">
-          <button type="button" className="es-modal__close" onClick={onClose}>
+          <button
+            type="button"
+            className="es-modal__close"
+            data-track-id="expectation_signature_modal_close"
+            onClick={onClose}
+          >
             CLOSE
           </button>
-          <button type="button" className="es-modal__sign" onClick={handleSubmit}>
+          <button
+            type="button"
+            className="es-modal__sign"
+            data-track-id="expectation_signature_modal_adopt"
+            onClick={handleSubmit}
+          >
             ADOPT AND SIGN
           </button>
         </div>
@@ -194,7 +204,13 @@ export function ExpectationSettingScreen({
           <header className="topbar">
             <div className="topbar-left">
               {typeof onBack === "function" ? (
-                <button type="button" className="back-link" onClick={onBack} aria-label="Go back">
+                <button
+                  type="button"
+                  className="back-link"
+                  data-track-id="expectation_header_back"
+                  onClick={onBack}
+                  aria-label="Go back"
+                >
                   <i className="ph ph-arrow-left" aria-hidden />
                 </button>
               ) : null}
@@ -306,6 +322,7 @@ export function ExpectationSettingScreen({
                       <button
                         type="button"
                         className="agreement-sign-placeholder"
+                        data-track-id="expectation_open_signature_modal"
                         onClick={() => setModalOpen(true)}
                       >
                         Your Sign Here
@@ -314,6 +331,7 @@ export function ExpectationSettingScreen({
                       <button
                         type="button"
                         className="agreement-sign-script agreement-sign-script--learner"
+                        data-track-id="expectation_edit_signature"
                         onClick={() => !showFilledHeader && setModalOpen(true)}
                         disabled={showFilledHeader}
                       >
@@ -371,6 +389,7 @@ export function ExpectationSettingScreen({
                   <button
                     type="button"
                     className="button"
+                    data-track-id="expectation_sign_off_submit"
                     disabled={submitMutation.isPending || !signature}
                     onClick={handleSignOff}
                   >
@@ -381,7 +400,12 @@ export function ExpectationSettingScreen({
             </div>
           ) : (
             <div className="es-post-sign">
-              <button type="button" className="button" onClick={onContinueToLetter}>
+              <button
+                type="button"
+                className="button"
+                data-track-id="expectation_continue_to_letter"
+                onClick={onContinueToLetter}
+              >
                 Continue to onboarding letter <i className="ph ph-arrow-right" aria-hidden />
               </button>
             </div>
