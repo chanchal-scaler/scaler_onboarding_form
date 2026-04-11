@@ -963,8 +963,10 @@
   position: relative;
   display: grid;
   grid-template-columns: 1fr 92px 1fr;
+  grid-template-rows: auto auto;
   gap: 18px;
   align-items: center;
+  align-content: start;
   min-height: 330px;
   padding: 8px 0;
 }
@@ -986,11 +988,13 @@
 
 .roadmap-content--left {
   grid-column: 1;
+  grid-row: 1;
   text-align: right;
 }
 
 .roadmap-content--right {
   grid-column: 3;
+  grid-row: 1;
   text-align: left;
 }
 
@@ -1092,8 +1096,10 @@
 
 .roadmap-center {
   grid-column: 2;
+  grid-row: 1;
   display: flex;
   justify-content: center;
+  align-self: center;
   z-index: 2;
 }
 
@@ -1127,6 +1133,7 @@
 
 .roadmap-expand-panel {
   grid-column: 1 / -1;
+  grid-row: 2;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -1287,26 +1294,39 @@
 }
 
 @media (max-width: 900px) {
+  /* Center the 1px stroke on the marker column axis (same as desktop’s translateX(-50%) treatment). */
   .timeline-screen .roadmap-timeline::before {
     left: 18px;
+    transform: translateX(-50%);
   }
 
   .roadmap-step {
     grid-template-columns: 36px 1fr;
+    grid-template-rows: auto auto;
     gap: 16px;
     min-height: auto;
     padding: 6px 0 34px;
+    align-items: start;
   }
 
   .roadmap-center {
     grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    justify-content: center;
+    padding-top: 2px;
   }
 
   .roadmap-content,
   .roadmap-content--left,
   .roadmap-content--right {
     grid-column: 2;
+    grid-row: 1;
     text-align: left;
+  }
+
+  .roadmap-expand-panel {
+    grid-row: 2;
   }
 
   .roadmap-content--left .roadmap-one-liner {
@@ -1547,7 +1567,7 @@
   }
 
   .letter-screen .insight-panel h3 {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .letter-screen .insight-list li {
@@ -1584,5 +1604,15 @@
   .roadmap-expand-image {
     max-height: 220px;
     object-fit: cover;
+  }
+
+  .letter-screen .insight-icon {
+    display: none;
+  }
+
+  .timeline-screen .hero {
+    background:
+    radial-gradient(circle at 86% 22%, rgba(0, 85, 255, 0.14), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(233, 241, 255, 0.48));
   }
 }

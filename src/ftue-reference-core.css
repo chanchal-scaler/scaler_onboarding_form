@@ -271,6 +271,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-top: 14px;
 }
 
 .progress-bar {
@@ -1009,6 +1010,7 @@ h1 {
     width: 220px;
     right: 10px;
     bottom: 8px;
+    background: none;
   }
 
   .topbar,
@@ -1033,5 +1035,9 @@ h1 {
   .button,
   .button-secondary {
     width: 100%;
+  }
+
+  .progress-label {
+    min-width: 70px;
   }
 }

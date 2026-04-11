@@ -340,17 +340,9 @@ export function TimelineScreen({ primaryCtaText = "Start this journey" }) {
                   onClick={milestone.expandable ? () => toggleStep(milestone.id) : undefined}
                   onKeyDown={milestone.expandable ? (e) => onKeyToggle(e, milestone.id) : undefined}
                 >
-                  {milestone.side === "left" ? (
-                    <>
-                      {content}
-                      {center}
-                    </>
-                  ) : (
-                    <>
-                      {center}
-                      {content}
-                    </>
-                  )}
+                  {/* Always node then card so mobile 2-col grid places marker + card on one row (left used to be card+node and broke alignment). */}
+                  {center}
+                  {content}
                   {expandPanel}
                 </article>
               );
