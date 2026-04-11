@@ -155,10 +155,7 @@ function App() {
 
   if (phase === "timeline") {
     return (
-      <TimelineScreen
-        primaryCtaText={timelineFloatingCta.primary}
-        secondaryCtaText={timelineFloatingCta.secondary}
-      />
+      <TimelineScreen primaryCtaText={timelineFloatingCta.primary} />
     );
   }
 

@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { publicAsset } from "../utils/publicAsset";
 
-const ROADMAP_EMAIL_HREF =
-  "mailto:?subject=My%2012-Month%20Scaler%20Roadmap&body=Hi,%0D%0A%0D%0AHere%20is%20my%20Scaler%2012-month%20roadmap.%0D%0A";
-
-/** Aligned with pipInstallish/Ftue_final roadmap.html */
+/** Synced with pipInstallish/Ftue_final roadmap.html (main timeline content). */
 const milestones = [
   {
     id: "day-0",
@@ -22,7 +19,8 @@ const milestones = [
     id: "day-1",
     time: "Day 1",
     title: "First mentor session",
-    copy: "Plan your Scaler journey with an industry veteran of your choice.",
+    copy:
+      "Learners who lock in mentors in Week 1 are 2-3× more likely to get roadmap clarity and hit milestones faster. Top mentor's slots are filling quickly — pick yours now.",
     side: "right",
     expandable: true,
     image: "/assets/roadmap/2nd-milestone.png",
@@ -39,6 +37,7 @@ const milestones = [
         AI. 24x7 <strong>AI companion</strong> for any support.
       </>
     ),
+    chips: [{ label: "24x7 AI companion" }, { label: "AI lab sessions" }],
     side: "left",
     expandable: true,
     image: "/assets/roadmap/3rd-milestone-new.png",
@@ -46,27 +45,45 @@ const milestones = [
     expandTitle: "First class",
   },
   {
-    id: "month-1",
+    id: "month-1-start",
     time: "Month 1",
+    title: "Start solving problems",
+    copy:
+      "Top performers don't get lucky — they get obsessively consistent. Your live dashboard shows exactly where you stand vs your cohort. Build your performance streak before it builds the gap.",
+    side: "right",
+    expandable: false,
+  },
+  {
+    id: "month-1-community",
+    time: "Month 1",
+    title: "Join community events",
+    copy:
+      "Referrals. Inside intel. Real talk from engineers already inside top companies. Your city community is where careers quietly get made — but only if you show up.",
+    side: "left",
+    expandable: true,
+    image: "/assets/roadmap/community.jpeg",
+    imageTag: "Community event preview",
+    expandTitle: "Join community events",
+  },
+  {
+    id: "month-2-mentor",
+    time: "Month 2",
     title: "Mentor check-in",
     copy: "Review progress and help resolve any concerns or feedback regarding your course.",
     side: "right",
     expandable: false,
   },
   {
-    id: "month-3",
+    id: "month-3-mock",
     time: "Month 3",
-    title: "Placement assistance begins",
+    title: "Attempt AI mock interviews",
     copy:
-      "Clear skill certification rounds at end of core modules and start applying to jobs from over 900+ hiring partners.",
+      "Practice until a Google L5 loop feels routine. AI feedback in real time. Optional human panels with actual FAANG engineers. Go again, and again.",
     side: "left",
-    expandable: true,
-    image: "/assets/roadmap/4th-milestone.png",
-    imageTag: "Careers Hub preview",
-    expandTitle: "Get skills, build your resume and apply to jobs on Careerhub",
+    expandable: false,
   },
   {
-    id: "month-5",
+    id: "month-5-mentor",
     time: "Month 5",
     title: "Mentor check-in",
     copy: "Review progress and help resolve any concerns or feedback regarding your course.",
@@ -74,20 +91,15 @@ const milestones = [
     expandable: false,
   },
   {
-    id: "month-7",
+    id: "month-7-track",
     time: "Month 7",
     title: "Choose a specialisation track",
-    copy: "Choose between these tracks:",
+    copy: "Choose between multiple Industry vetted specialisation tracks.",
     side: "left",
     expandable: false,
-    chips: [
-      { label: "Backend" },
-      { label: "Fullstack" },
-      { label: "Data engineering" },
-    ],
   },
   {
-    id: "month-8",
+    id: "month-8-mentor",
     time: "Month 8",
     title: "Mentor check-in",
     copy: "Review progress and help resolve any concerns or feedback regarding your course.",
@@ -95,39 +107,67 @@ const milestones = [
     expandable: false,
   },
   {
+    id: "month-9-resume",
+    time: "Month 9",
+    title: "Build Your Resume",
+    copy:
+      "ATS systems quietly reject most resumes before a human ever sees them. AI-optimized, battle-tested templates, reviewed by people who've hired at top companies.",
+    side: "left",
+    expandable: false,
+  },
+  {
     id: "month-10-portfolio",
     time: "Month 10",
     title: "Real world portfolio project",
-    copy: "Use learnings for a practical project.",
-    side: "left",
+    copy:
+      "Use learnings for a practical project. Production-grade systems that look like real engineering work on your resume.",
+    side: "right",
     expandable: false,
-    chips: [{ label: "AI literacy" }, { label: "HLD" }, { label: "LLD" }, { label: "Front end" }],
+    chips: [{ label: "AI literacy" }],
   },
   {
-    id: "month-10-ready",
+    id: "month-10-congrats",
     time: "Month 10",
     title: "Congrats, now you are industry ready!",
     copy: "Clear skill certifications and be eligible to apply for all the roles.",
-    side: "right",
+    side: "left",
     expandable: false,
     chips: [
       { label: "AI infused UI engineer", variant: "ai" },
       { label: "AI augmented SWE", variant: "ai" },
       { label: "Multi-modal AI engineer", variant: "ai" },
-      { label: "Agent engineer", variant: "ai" },
       { label: "AI architect", variant: "ai" },
-      { label: "Forward deployed engineer" },
+      { label: "Decision scientist", variant: "ai" },
+      { label: "AI analyst", variant: "ai" },
+      { label: "AI Platform Engineer", variant: "ai" },
+      { label: "Agentic Workflow Designer", variant: "ai" },
+      { label: "GPU Infrastructure Specialist", variant: "ai" },
+      { label: "Semantic Knowledge Engineer", variant: "ai" },
+      { label: "ML systems engineer", variant: "ai" },
+      { label: "Forward deployed engineer", variant: "ai" },
       { label: "Senior SWE" },
     ],
   },
   {
-    id: "month-11",
+    id: "month-10-placement",
+    time: "Month 10",
+    title: "Placement assistance begins",
+    copy:
+      "Clear skill certification rounds at end of core modules and start applying to jobs from over 900+ hiring partners.",
+    side: "right",
+    expandable: true,
+    image: "/assets/roadmap/4th-milestone.png",
+    imageTag: "Careers Hub preview",
+    expandTitle: "Get skills, build your resume and apply to jobs on Careerhub",
+  },
+  {
+    id: "month-11-electives",
     time: "Month 11",
     title: "Additional AI electives",
-    copy: "Eligible for GenAI, Product management with AI etc.",
+    copy:
+      "Eligible for GenAI, Product management with AI etc. (Please check your brochures for all updated electives for your programme)",
     side: "left",
     expandable: false,
-    chips: [{ label: "GenAI", variant: "ai" }, { label: "Product management with AI", variant: "ai" }],
   },
   {
     id: "beyond-y1",
@@ -163,10 +203,7 @@ function RoadmapChips({ chips }) {
   );
 }
 
-export function TimelineScreen({
-  primaryCtaText = "Start this journey",
-  secondaryCtaText = "Questions? Request a callback",
-}) {
+export function TimelineScreen({ primaryCtaText = "Start this journey" }) {
   const [openId, setOpenId] = useState(null);
   const [activeScrollId, setActiveScrollId] = useState(milestones[0].id);
   const stepRefs = useRef([]);
@@ -225,7 +262,7 @@ export function TimelineScreen({
     <section className="screen default-screen timeline-screen">
       <main className="shell">
         <header className="hero">
-          <p className="eyebrow">Your 12-month roadmap to</p>
+          <div className="eyebrow">Your 12-month roadmap to</div>
           <h1 className="headline">Learning and Building, with and from, AI.</h1>
           <p className="subcopy">
             TL;DR: Meet and greet orientation session, foundational modules, core modules, choose a
@@ -254,7 +291,7 @@ export function TimelineScreen({
               const content = (
                 <div className={`roadmap-content roadmap-content--${milestone.side}`}>
                   <div className="roadmap-time">{milestone.time}</div>
-                  <h3 className="roadmap-title">{milestone.title}</h3>
+                  <h2 className="roadmap-title">{milestone.title}</h2>
                   {body}
                 </div>
               );
@@ -270,7 +307,7 @@ export function TimelineScreen({
                   <div className="roadmap-expand-panel">
                     <div className="roadmap-expand-shell">
                       <p className="roadmap-expand-label">Milestone walkthrough</p>
-                      <h4 className="roadmap-expand-title">{milestone.expandTitle || milestone.title}</h4>
+                      <h3 className="roadmap-expand-title">{milestone.expandTitle || milestone.title}</h3>
                       <div className="roadmap-expand-gallery">
                         <div className="roadmap-placeholder roadmap-placeholder--image">
                           <img
@@ -329,9 +366,6 @@ export function TimelineScreen({
         >
           {primaryCtaText} <i className="ph ph-arrow-right" aria-hidden />
         </a>
-        {/* <a className="roadmap-float-btn roadmap-float-btn--secondary" href={ROADMAP_EMAIL_HREF}>
-          {secondaryCtaText}
-        </a> */}
       </div>
     </section>
   );

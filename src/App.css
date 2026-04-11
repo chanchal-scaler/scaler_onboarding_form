@@ -220,25 +220,6 @@
   }
 }
 
-/*
- * Screen 1 uses `.eyebrow` for “A founder welcome” (pipInstallish/Ftue_final index.html).
- * Override global ftue `.eyebrow` (uppercase gray) so it reads as a navy kicker line.
- */
-#screen-1 .welcome-stage .eyebrow {
-  margin: 0 0 12px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  text-transform: none;
-  color: var(--heading);
-  line-height: 1.35;
-}
-
-#screen-1 .welcome-stage .hero-copy {
-  margin-top: 20px;
-}
-
 /* Choice fields — align with reference .chip / .chip.active */
 .field .checkbox-group,
 .field .radio-group {
@@ -488,7 +469,6 @@
 
 .letter-screen .letter-frame {
   display: grid;
-  /* gap: 24px; */
 }
 
 .letter-screen .letter-eyebrow,
@@ -512,8 +492,17 @@
   color: var(--letter-black);
 }
 
+.letter-screen .subheadline {
+  margin: 18px 0;
+  color: var(--letter-gray-500);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
 .letter-screen .subheading {
-  margin: 18px 0 0;
+  margin: 0 0 18px;
   color: var(--letter-gray-500);
   font-size: 15px;
   font-weight: 600;
@@ -545,6 +534,10 @@
   width: 96px;
   height: 96px;
   border: 1px solid var(--letter-border-strong);
+  background: linear-gradient(135deg, #efefef, #d9d9d9);
+  display: block;
+  flex: 0 0 auto;
+  overflow: hidden;
   object-fit: cover;
 }
 
@@ -597,22 +590,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   padding: 4px 10px;
 }
 
 .letter-screen .org-logo img {
   max-width: 100%;
   max-height: 100%;
+  display: block;
 }
 
-.letter-screen .alumni-link {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--blue);
-}
-
+/* Personalized letter + mission block (mission = Ftue panels + closing prose) */
 .letter-screen .letter-card {
   margin-top: 26px;
   padding: 32px;
@@ -621,9 +609,192 @@
   background: rgba(255, 255, 255, 0.92);
 }
 
+.letter-screen .letter-card:not(.letter-card--mission) .letter-stack {
+  display: grid;
+  gap: 18px;
+}
+
+.letter-screen .letter-card:not(.letter-card--mission) .letter-stack p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.8;
+  letter-spacing: -0.02em;
+  color: var(--letter-gray-700);
+}
+
+.letter-screen .letter-card:not(.letter-card--mission) .letter-stack strong {
+  color: var(--letter-black);
+  font-weight: 800;
+}
+
+.letter-screen .insight-section-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--letter-black);
+}
+
+.letter-screen .insight-section-subtitle {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--letter-gray-700);
+}
+
+.letter-screen .insight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 24px;
+  margin-bottom: 22px;
+  align-items: stretch;
+}
+
+.letter-screen .insight-panel {
+  border: 1px solid var(--letter-border-strong);
+  display: grid;
+  align-content: start;
+  overflow: hidden;
+}
+
+.letter-screen .insight-panel--concerns {
+  background: #f2f2f2;
+  border-color: #d7d7d7;
+}
+
+.letter-screen .insight-panel--scaler {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: var(--blue);
+  color: var(--letter-black);
+}
+
+.letter-screen .insight-panel-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 28px 28px 24px;
+  min-height: 188px;
+}
+
+.letter-screen .insight-panel--concerns .insight-panel-head {
+  background: #efefef;
+  color: var(--letter-black);
+}
+
+.letter-screen .insight-panel--scaler .insight-panel-head {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.letter-screen .insight-icon {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  line-height: 1;
+  font-size: 42px;
+}
+
+.letter-screen .insight-panel--concerns .insight-icon {
+  font-size: 54px;
+}
+
+.letter-screen .insight-logo {
+  width: 112px;
+  height: auto;
+  display: block;
+}
+
+.letter-screen .insight-panel h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.letter-screen .insight-panel--scaler .insight-panel-head h3 {
+  color: var(--white);
+}
+
+.letter-screen .insight-panel--scaler .brand-accent {
+  color: var(--white);
+}
+
+.letter-screen .insight-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: inherit;
+}
+
+.letter-screen .insight-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 22px 28px;
+  border-top: 1px dashed rgba(16, 30, 55, 0.14);
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+}
+
+.letter-screen .insight-panel--concerns .insight-list li {
+  color: #3f3f46;
+}
+
+.letter-screen .insight-panel--scaler .insight-list li {
+  border-top-color: rgba(0, 85, 255, 0.18);
+  color: #2f69ff;
+  background: transparent;
+}
+
+.letter-screen .insight-bullet {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.letter-screen .insight-panel--concerns .insight-bullet {
+  border: 1px solid #b9b9b9;
+  color: #8b8b8b;
+}
+
+.letter-screen .insight-panel--scaler .insight-bullet {
+  border: 1px solid rgba(0, 85, 255, 0.38);
+  color: var(--blue);
+}
+
+.letter-screen .insight-list strong {
+  font-weight: 700;
+  color: inherit;
+}
+
 .letter-screen .letter-stack {
   display: grid;
   gap: 18px;
+}
+
+.letter-screen .letter-subtitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--letter-black);
 }
 
 .letter-screen .letter-stack p {
@@ -639,43 +810,12 @@
   font-weight: 800;
 }
 
-.letter-screen .insight-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  margin-top: 24px;
-}
-
-.letter-screen .insight-card {
-  border: 1px solid var(--letter-border-strong);
-  background: rgba(255, 255, 255, 0.92);
-  padding: 22px;
-}
-
-.letter-screen .insight-card h3 {
-  margin: 0 0 12px;
-  font-family: var(--font-display);
-  font-size: 20px;
-  line-height: 1.2;
-  font-weight: 500;
-  color: var(--letter-black);
-}
-
-.letter-screen .insight-card ul {
-  margin: 0;
-  padding-left: 18px;
-  display: grid;
-  gap: 10px;
-  color: var(--letter-gray-700);
-  font-size: 15px;
-  line-height: 1.75;
-}
-
 .letter-screen .letter-cta-row {
+  display: flex;
   margin-top: 28px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
+  gap: 10px;
 }
 
 .letter-screen .letter-cta-row .button {
@@ -747,7 +887,7 @@
   padding: clamp(40px, 6vw, 74px) clamp(24px, 4vw, 56px);
   border: 1px solid var(--border-light);
   background:
-    linear-gradient(var(--border-light), var(--border-light)) 0 88px / 100% 1px no-repeat,
+    linear-gradient(var(--border-light), var(--border-light)) 0 93px / 100% 1px no-repeat,
     radial-gradient(circle at 86% 22%, rgba(0, 85, 255, 0.14), transparent 24%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(233, 241, 255, 0.48));
   position: relative;
@@ -1220,6 +1360,15 @@
     grid-template-columns: 1fr;
   }
 
+  .letter-screen .insight-panel-head {
+    min-height: auto;
+    padding: 22px 22px 18px;
+  }
+
+  .letter-screen .insight-list li {
+    padding: 18px 22px;
+  }
+
   .letter-screen .cta-actions .button,
   .letter-screen .cta-actions .button-secondary {
     width: 100%;
@@ -1363,11 +1512,6 @@
     width: 100%;
     max-width: none;
     padding: 36px 0 44px;
-    padding-left: max(0px, env(safe-area-inset-left, 0px));
-    padding-right: max(0px, env(safe-area-inset-right, 0px));
-  }
-
-  .letter-screen .letter-frame {
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
@@ -1393,19 +1537,20 @@
     padding: 22px 18px;
   }
 
-  .letter-screen .letter-stack p {
+  .letter-screen .letter-stack p,
+  .letter-screen .letter-card:not(.letter-card--mission) .letter-stack p {
     font-size: 14px;
   }
 
-  .letter-screen .insight-card {
-    padding: 18px;
+  .letter-screen .insight-section-title {
+    font-size: clamp(22px, 5.5vw, 28px);
   }
 
-  .letter-screen .insight-card h3 {
-    font-size: 18px;
+  .letter-screen .insight-panel h3 {
+    font-size: 20px;
   }
 
-  .letter-screen .insight-card ul {
+  .letter-screen .insight-list li {
     font-size: 14px;
   }
 

@@ -194,7 +194,14 @@ textarea {
 }
 
 #screen-1 .welcome-content::after {
-  content: none;
+  content: "";
+  position: absolute;
+  right: 20px;
+  bottom: 14px;
+  width: clamp(280px, 22vw, 420px);
+  aspect-ratio: 1 / 1;
+  background: url("/Union.png") no-repeat center / contain;
+  pointer-events: none;
 }
 
 #screen-1 .topbar {
@@ -999,7 +1006,9 @@ h1 {
   }
 
   #screen-1 .welcome-content::after {
-    content: none;
+    width: 220px;
+    right: 10px;
+    bottom: 8px;
   }
 
   .topbar,

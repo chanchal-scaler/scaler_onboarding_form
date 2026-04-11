@@ -6,7 +6,6 @@ const alumni = [
     role: "SDE 2 at CYware",
     before: "Fresher",
     company: "CYware",
-    href: "https://www.linkedin.com/posts/mayank6_iamscaler-coding-programmers-activity-6878628380611248128-D0QY/",
     photo: "/assets/alumni/mayank-chauhan.jpeg",
     logo: "/assets/alumni/logos/cyware.png",
   },
@@ -15,7 +14,6 @@ const alumni = [
     role: "SDE - Full Stack @ Lido",
     before: "Fresher",
     company: "Lido",
-    href: "https://www.linkedin.com/in/-saurabh--singh/?originalSubdomain=in",
     photo: "/assets/alumni/saurabh-singh.jpeg",
     logo: "/assets/alumni/logos/lido.jpeg",
   },
@@ -24,28 +22,22 @@ const alumni = [
     role: "Backend Developer @ HealthifyMe",
     before: "Fresher",
     company: "HealthifyMe",
-    href: "https://www.linkedin.com/posts/siddharth-aadarsh_scaler-healthifyme-licious-activity-6873682154916855808-fX6J/",
     photo: "/assets/alumni/siddharth-aadarsh.jpeg",
     logo: "/assets/alumni/logos/healthifyme.png",
   },
 ];
 
-const EMAIL_LETTER_HREF =
-  "mailto:?subject=My%20Scaler%20Onboarding%20Letter&body=Hi,%0D%0A%0D%0AHere%20is%20my%20Scaler%20onboarding%20letter.%0D%0A";
-
-export function FinalLetterScreen({ user, allValues, onContinue, continueDisabled = false }) {
+export function FinalLetterScreen({ user, onContinue, continueDisabled = false }) {
   const userName = user?.name || "Learner";
-  const experience = allValues?.total_experience || "3.4 years";
-  const target = allValues?.goal || allValues?.career_goal || "a stronger backend role";
 
   return (
     <section className="screen default-screen shell page letter-screen">
       <div className="letter-frame letter-page">
         <p className="eyebrow letter-eyebrow">Welcome note</p>
         <h1 className="headline">
-          {userName}, your journey to staying relevant, starts now.{" "}
-          (50+ learners with similar profiles are also starting this journey with you)
+          {userName}, your journey to staying relevant, starts now
         </h1>
+        <p className="subheadline">(50+ learners have already enrolled, with similar profile like you)</p>
         <p className="subheading">Scaler alumni who had a similar journey as yours</p>
 
         <div className="alumni-strip">
@@ -74,69 +66,120 @@ export function FinalLetterScreen({ user, allValues, onContinue, continueDisable
           ))}
         </div>
 
-        <section className="letter-card">
-          <div className="letter-stack">
+        <section className="letter-card letter-card--mission">
+          <h2 className="insight-section-title">Scaler&apos;s mission and your future with AI</h2>
+          <p className="insight-section-subtitle">How Scaler helps you stay relevant with AI</p>
+
+          <section className="insight-grid">
+            <article className="insight-panel insight-panel--concerns">
+              <div className="insight-panel-head">
+                <div className="insight-icon" aria-hidden>
+                  <i className="ph ph-user-focus" />
+                </div>
+                <h3>Common conerns around using AI</h3>
+              </div>
+              <ul className="insight-list">
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-x" />
+                  </span>
+                  <span>Outputs are often wrong.</span>
+                </li>
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-x" />
+                  </span>
+                  <span>Debugging AI generated code often takes time.</span>
+                </li>
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-x" />
+                  </span>
+                  <span>Not sure when to use AI vs Do it myself.</span>
+                </li>
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-x" />
+                  </span>
+                  <span>Worry about over dependence.</span>
+                </li>
+              </ul>
+            </article>
+
+            <article className="insight-panel insight-panel--scaler">
+              <div className="insight-panel-head">
+                <div className="insight-icon" aria-hidden>
+                  <img className="insight-logo" src={publicAsset("/Scaler-Logo_White-3.png")} alt="" />
+                </div>
+                <h3>
+                  How <span className="brand-accent">Scaler</span> empowers you for AI era?
+                </h3>
+              </div>
+              <ul className="insight-list">
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-check" />
+                  </span>
+                  <span>
+                    Understand how to prompt, set up evals, use RAG/context correctly, and add guardrails so
+                    AI does not hallucinate.
+                  </span>
+                </li>
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-check" />
+                  </span>
+                  <span>
+                    Use AI to validate AI-generated code: LLM-as-a-judge, hidden test cases, second-model
+                    review, quick tests for deterministic outputs, plus monitoring and logging to spot
+                    errors early.
+                  </span>
+                </li>
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-check" />
+                  </span>
+                  <span>
+                    Use AI for speed in repeatable work, while your own reasoning leads architecture and
+                    system design.
+                  </span>
+                </li>
+                <li>
+                  <span className="insight-bullet" aria-hidden>
+                    <i className="ph ph-check" />
+                  </span>
+                  <span>
+                    In an AI-first world, foundations matter more than ever. <strong>Scaler</strong> builds
+                    strong engineering principles alongside practical AI application, so you&apos;re not
+                    just keeping up, but staying ahead.
+                  </span>
+                </li>
+              </ul>
+            </article>
+          </section>
+
+          <div className="letter-stack letter-stack--mission-close">
+            <h3 className="letter-subtitle">
+              The shift in front of you is not about AI replacing roles. It is about roles changing shape.
+            </h3>
             <p>
-              You are a <strong>software engineer with {experience} of experience</strong>, and you are
-              here because you want to switch into {target}, crack SDE interviews, and learn how to use AI
-              effectively without relying on it.
+              AI is becoming a new layer of leverage, and the people who learn to use it will stay
+              relevant. They will be the ones who can identify real problems, build quickly, and ship
+              solutions rapidly, all on top of <strong>strong technical foundations</strong>.
             </p>
             <p>
-              Right now, your profile reads like someone with comfortable programming fundamentals,
-              working SQL confidence, and a base in DSA that can go further, while your AI readiness
-              already shows regular usage but a clear blocker around{" "}
-              <strong>debugging AI-generated code without losing your own judgment</strong>.
+              That is where <strong>Scaler</strong> comes in. We did not add an AI module. We rebuilt
+              everything. Learning once is not enough anymore. Scaler gives you the pole position in AI
+              today and keeps you there for the next decade with updated curriculum and lifelong access.
+              You are not buying a snapshot of 2025. You are buying a living system that updates as the
+              market moves.
             </p>
             <p>
-              The first phase will not feel like random content consumption. It will feel like{" "}
-              <strong>structured pressure in the right places</strong>: better backend thinking, sharper
-              debugging habits, more deliberate problem solving, and earlier clarity on when AI should
-              speed you up versus when it should be challenged.
-            </p>
-            <p>
-              If your goal is to switch into backend with stronger outcomes, then{" "}
-              <strong>consistency has to become part of your identity</strong>. Backend roles reward
-              people who can think clearly, debug independently, and use leverage well without outsourcing
-              judgment.
+              It is where you learn how to use AI with judgment, while deepening thinking, problem solving,
+              and long-term technical depth, so you do not just prepare for your next job, you build
+              relevance for every job that comes after it.
             </p>
           </div>
-        </section>
-
-        <section className="insight-grid">
-          <article className="insight-card">
-            <h3>What surprised us about your profile</h3>
-            <ul>
-              <li>
-                You are not starting from zero. Your role already gives you enough real-world context to
-                make backend depth practical, not abstract.
-              </li>
-              <li>
-                Your motivation around curriculum and mentorship suggests you are not looking for
-                inspiration alone. You want structure that leads to outcomes.
-              </li>
-              <li>
-                Your goal is not just job switch. It is a more credible engineering identity in an
-                AI-shaped market.
-              </li>
-            </ul>
-          </article>
-          <article className="insight-card">
-            <h3>What early modules will address for you</h3>
-            <ul>
-              <li>
-                They will help you become more interview-ready for backend engineering roles by tightening
-                the problem-solving and systems thinking expected in stronger hiring loops.
-              </li>
-              <li>
-                They will directly help with your blocker around debugging AI-generated code, so AI
-                becomes a useful accelerator in your workflow instead of a source of confusion.
-              </li>
-              <li>
-                They will push your current proficiency summary toward stronger execution by helping you
-                turn existing programming comfort into more reliable backend decision-making.
-              </li>
-            </ul>
-          </article>
         </section>
 
         <div className="cta-row letter-cta-row">
