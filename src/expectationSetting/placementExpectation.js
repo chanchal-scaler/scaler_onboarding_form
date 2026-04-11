@@ -1,0 +1,28 @@
+import { COURSE_TYPES } from "./constants";
+
+export const PLACEMENT_EXPECTATIONS = {
+  [COURSE_TYPES.expectation_form_devops_v2]: [
+    "You must complete the requisite module wise certifications to be eligible to apply for jobs via the Scaler career assistance portal. The modules have been prepared keeping in mind industry standards and we ensure that they are updated / changed in a timely manner as per evolving industry scenarios and other reasons. A normal student takes anywhere between 9-12 months to complete the same. Time taken by individuals may vary depending on their pace of learning, pauses taken in between etc.",
+    "Scaler focuses on upskilling you for industry readiness. It's NOT a placement or job guarantee program. We equip you with the expertise required to thrive in a competitive market and offer career assistance. Past audited placement reports of Scaler showcase the career outcomes of the graduates from our program, however your individual outcome will be dependent on skills built by you, your past work experience and the prevailing market conditions.",
+    "At Scaler, we equip you with top-notch skills in the domain of your choice. However, salary hikes depend on role complexity, current CTC, relevant experience, and negotiation skills. Scaler cannot guarantee specific salary increases.",
+    "Currently, only companies with a presence in India use Scaler as a channel to hire talent for roles in their Indian offices.",
+  ],
+  [COURSE_TYPES.expectation_form_academy_v2]: [
+    "You must complete the requisite module wise certifications to be eligible to apply for jobs via the Scaler career assistance portal. The modules have been prepared keeping in mind industry standards and we ensure that they are updated / changed in a timely manner as per evolving industry scenarios and other reasons. A normal student takes anywhere between 9-12 months to complete the same. Time taken by individuals may vary depending on their pace of learning, pauses taken in between etc.",
+    "Scaler focuses on upskilling you for industry readiness. It's NOT a placement or job guarantee program. We equip you with the expertise required to thrive in a competitive market and offer career assistance. Past audited placement reports of Scaler showcase the career outcomes of the graduates from our program, however your individual outcome will be dependent on skills built by you, your past work experience and the prevailing market conditions.",
+    "At Scaler, we equip you with top-notch skills in the domain of your choice. However, salary hikes depend on role complexity, current CTC, relevant experience, and negotiation skills. Scaler cannot guarantee specific salary increases.",
+    "Currently, only companies with a presence in India use Scaler as a channel to hire talent for roles in their Indian offices.",
+  ],
+  [COURSE_TYPES.expectation_form_ds_v2]: [
+    "You must complete the requisite module wise certifications to be eligible to apply for jobs via the Scaler career assistance portal. The modules have been prepared keeping in mind industry standards and we ensure that they are updated / changed in a timely manner as per evolving industry scenarios and other reasons. A normal student takes anywhere between 9-12 months to complete the same. Time taken by individuals may vary depending on their pace of learning, pauses taken in between etc.",
+    "Scaler focuses on upskilling you for industry readiness. It's NOT a placement or job guarantee program. We equip you with the expertise required to thrive in a competitive market and offer career assistance. Past audited placement reports of Scaler showcase the career outcomes of the graduates from our program, however your individual outcome will be dependent on skills built by you, your past work experience and the prevailing market conditions.",
+    "At Scaler, we equip you with top-notch skills in the domain of your choice. However, salary hikes depend on role complexity, current CTC, relevant experience, and negotiation skills. Scaler cannot guarantee specific salary increases.",
+    "Currently, only companies with a presence in India use Scaler as a channel to hire talent for roles in their Indian offices.",
+  ],
+  [COURSE_TYPES.expectation_form_ai_ml_v2]: [
+    "You must complete the requisite module wise certifications to be eligible to apply for jobs via the Scaler career assistance portal. The modules have been prepared keeping in mind industry standards and we ensure that they are updated / changed in a timely manner as per evolving industry scenarios and other reasons. A normal student takes anywhere between 9-12 months to complete the same. Time taken by individuals may vary depending on their pace of learning, pauses taken in between etc.",
+    "Scaler focuses on upskilling you for industry readiness. It's NOT a placement or job guarantee program. We equip you with the expertise required to thrive in a competitive market and offer career assistance. Past audited placement reports of Scaler showcase the career outcomes of the graduates from our program, however your individual outcome will be dependent on skills built by you, your past work experience and the prevailing market conditions.",
+    "At Scaler, we equip you with top-notch skills in the domain of your choice. However, salary hikes depend on role complexity, current CTC, relevant experience, and negotiation skills. Scaler cannot guarantee specific salary increases.",
+    "Currently, only companies with a presence in India use Scaler as a channel to hire talent for roles in their Indian offices.",
+  ],
+};

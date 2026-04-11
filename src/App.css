@@ -84,7 +84,8 @@
   grid-column: 1 / -1;
 }
 
-@media (max-width: 1080px) {
+/* Stack all layout-width fields in one column (tablet + phone) */
+@media (max-width: 1200px) {
   .form-shell .field-grid--layout > .field {
     grid-column: 1 / -1 !important;
   }
@@ -210,6 +211,13 @@
 #screen-1.home-screen.screen {
   padding-left: clamp(16px, 6vw, 140px);
   padding-right: clamp(16px, 6vw, 140px);
+}
+
+@media (max-width: 760px) {
+  #screen-1.home-screen.screen {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 /*
@@ -955,6 +963,9 @@
   background: var(--white);
   border: 1px solid var(--border);
   position: relative;
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease;
 }
 
 .roadmap-node::after {
@@ -962,6 +973,7 @@
   position: absolute;
   inset: 6px;
   background: var(--inactive);
+  transition: background-color 220ms ease;
 }
 
 .roadmap-node--active {
@@ -1215,23 +1227,13 @@
 }
 
 /* --- Loading & empty states --- */
-.loading-screen {
+/* Specificity beats `.screen.default-screen { display: block }` so the spinner is centered */
+.screen.default-screen.loading-screen {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 40px 24px;
+  padding: 24px;
   background: var(--white);
-  color: var(--text);
-}
-
-.loading-card {
-  width: min(440px, 100%);
-  border: 1px solid var(--border-light);
-  background: var(--panel);
-  padding: 40px 32px;
-  display: grid;
-  gap: 16px;
-  justify-items: start;
 }
 
 .loading-spinner {
@@ -1239,6 +1241,7 @@
   height: 36px;
   border: 2px solid var(--border-light);
   border-top-color: var(--blue);
+  border-radius: 50%;
   animation: ftue-spin 0.85s linear infinite;
 }
 
@@ -1246,32 +1249,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.loading-kicker {
-  margin: 0;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--light-muted);
-}
-
-.loading-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(26px, 4vw, 36px);
-  font-weight: 500;
-  line-height: 1.05;
-  color: var(--heading);
-}
-
-.loading-message {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--muted);
-  opacity: 0.92;
 }
 
 .state-screen {
@@ -1303,4 +1280,164 @@
   line-height: 1.65;
   color: var(--text);
   opacity: 0.9;
+}
+
+/* --- App-wide mobile: shell, forms, chips, letter, timeline --- */
+@media (max-width: 760px) {
+  .state-screen {
+    padding: max(32px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+      max(32px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .state-screen .page {
+    padding: 28px 20px;
+  }
+
+  .state-screen h1 {
+    font-size: clamp(22px, 5.5vw, 28px);
+  }
+
+  .state-screen p {
+    font-size: 14px;
+  }
+
+  .step-narrative-head {
+    margin-bottom: 22px;
+  }
+
+  .step-narrative-head .narrative-section-label {
+    font-size: 15px;
+  }
+
+  .step-narrative-head .section-title {
+    margin: 0 0 18px;
+    font-size: clamp(24px, 7vw, 32px);
+  }
+
+  .step-narrative-head .section-subtitle {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .step-screen--sub-sections .step-narrative-head .narrative-section-label {
+    font-size: 15px;
+  }
+
+  .step-screen--sub-sections .step-narrative-head .section-title {
+    font-size: clamp(24px, 7vw, 34px);
+  }
+
+  .step-screen--sub-sections .step-narrative-head .section-subtitle {
+    font-size: 16px;
+  }
+
+  .form-shell .sub-section-card {
+    padding: 16px 14px;
+  }
+
+  .form-shell .sub-section-card__title {
+    font-size: clamp(20px, 5.5vw, 26px);
+    line-height: 1.2;
+  }
+
+  .field .checkbox-group,
+  .field .radio-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .field .checkbox-option,
+  .field .radio-option {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start;
+  }
+
+  .step-screen--sub-sections .form-shell .field .checkbox-option,
+  .step-screen--sub-sections .form-shell .field .radio-option {
+    font-size: 15px;
+  }
+
+  .letter-screen.page {
+    width: 100%;
+    max-width: none;
+    padding: 36px 0 44px;
+    padding-left: max(0px, env(safe-area-inset-left, 0px));
+    padding-right: max(0px, env(safe-area-inset-right, 0px));
+  }
+
+  .letter-screen .letter-frame {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  .letter-screen .headline {
+    font-size: clamp(28px, 8vw, 42px);
+  }
+
+  .letter-screen .subheading {
+    font-size: 14px;
+  }
+
+  .letter-screen .alumni-photo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .letter-screen .alumni-name {
+    font-size: 15px;
+  }
+
+  .letter-screen .letter-card {
+    padding: 22px 18px;
+  }
+
+  .letter-screen .letter-stack p {
+    font-size: 14px;
+  }
+
+  .letter-screen .insight-card {
+    padding: 18px;
+  }
+
+  .letter-screen .insight-card h3 {
+    font-size: 18px;
+  }
+
+  .letter-screen .insight-card ul {
+    font-size: 14px;
+  }
+
+  .timeline-screen .shell {
+    width: 100%;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  .timeline-screen .hero {
+    padding: 28px 16px 32px;
+  }
+
+  .timeline-screen .hero::after {
+    width: min(50vw, 200px);
+    opacity: 0.55;
+  }
+
+  .timeline-screen .headline {
+    font-size: clamp(32px, 10vw, 52px);
+  }
+
+  .timeline-screen .subcopy {
+    font-size: 16px;
+  }
+
+  .roadmap-placeholder--image {
+    min-height: 180px;
+  }
+
+  .roadmap-expand-image {
+    max-height: 220px;
+    object-fit: cover;
+  }
 }

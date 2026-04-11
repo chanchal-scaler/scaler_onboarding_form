@@ -1,10 +1,11 @@
 import {
-  FORM_GROUP_PATH,
+  getInterviewbitFormGroupsPath,
   FORM_SUBMIT_PATH,
   INITIAL_LOAD_DATA_PATH,
   ONBOARDING_COMPLETED_TRACKING_PATH,
   toUrl,
 } from "./config";
+import { getOnboardingFormGroupLabelV3 } from "../onboardingFormV3Constants";
 import { AuthError } from "../authError";
 import { apiFetch } from "./httpClient";
 import { resolveAuthToken } from "./tokenAuth";
@@ -33,8 +34,9 @@ export async function fetchInitialLoadWithCompletionDecision() {
   };
 }
 
-export function fetchOnboardingFormGroup() {
-  return apiFetch(FORM_GROUP_PATH);
+export function fetchOnboardingFormGroup(courseSlug) {
+  const label = getOnboardingFormGroupLabelV3(courseSlug);
+  return apiFetch(getInterviewbitFormGroupsPath(label));
 }
 
 export function submitOnboardingForm(payload) {

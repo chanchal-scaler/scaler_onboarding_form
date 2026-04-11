@@ -1,5 +1,3 @@
-import { publicAsset } from "../utils/publicAsset";
-
 export function HomeScreen({ onStart }) {
   return (
     <section className="screen default-screen home-screen" id="screen-1">
@@ -53,9 +51,6 @@ export function HomeScreen({ onStart }) {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="welcome-wheel" aria-hidden="true">
-            <img src={publicAsset("/Union.png")} alt="" />
           </div>
         </main>
       </div>

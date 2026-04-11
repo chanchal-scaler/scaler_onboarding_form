@@ -33,7 +33,7 @@ const alumni = [
 const EMAIL_LETTER_HREF =
   "mailto:?subject=My%20Scaler%20Onboarding%20Letter&body=Hi,%0D%0A%0D%0AHere%20is%20my%20Scaler%20onboarding%20letter.%0D%0A";
 
-export function FinalLetterScreen({ user, allValues, onContinue }) {
+export function FinalLetterScreen({ user, allValues, onContinue, continueDisabled = false }) {
   const userName = user?.name || "Learner";
   const experience = allValues?.total_experience || "3.4 years";
   const target = allValues?.goal || allValues?.career_goal || "a stronger backend role";
@@ -145,8 +145,14 @@ export function FinalLetterScreen({ user, allValues, onContinue }) {
             Your 12-month roadmap is ready next
           </p>
           <div className="cta-actions">
-            <button className="button" type="button" onClick={onContinue}>
-              View your 12-month roadmap <i className="ph ph-arrow-right" aria-hidden />
+            <button
+              className="button"
+              type="button"
+              onClick={onContinue}
+              disabled={continueDisabled}
+            >
+              {continueDisabled ? "Loading…" : "View your 12-month roadmap"}{" "}
+              {!continueDisabled ? <i className="ph ph-arrow-right" aria-hidden /> : null}
             </button>
           </div>
         </div>

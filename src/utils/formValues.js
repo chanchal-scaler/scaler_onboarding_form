@@ -5,7 +5,10 @@ export function otherFieldKey(fieldId) {
 export function getDefaultValues(fields, allValues) {
   return fields.reduce((acc, field) => {
     acc[field.id] = allValues[field.id] ?? (field.type === "multicheck" ? [] : "");
-    if (field.type === "multicheck" && field.otherOptionValue != null) {
+    if (
+      (field.type === "multicheck" || field.type === "select" || field.type === "radio") &&
+      field.otherOptionValue != null
+    ) {
       acc[otherFieldKey(field.id)] = allValues[otherFieldKey(field.id)] ?? "";
     }
     return acc;
@@ -51,21 +54,30 @@ function collectFieldsById(screens = []) {
   return byId;
 }
 
-/** Replace "Any other" value with free text so `#`-joined payload matches other option labels. */
-function applyMulticheckOtherText(merged, fieldsById) {
+/** Replace "Other" option values with free text for submit (multicheck arrays and select). */
+function applyOtherFreeText(merged, fieldsById) {
   const out = { ...merged };
   for (const field of fieldsById.values()) {
-    if (field.type !== "multicheck" || field.otherOptionValue == null) continue;
+    if (field.otherOptionValue == null) continue;
     const id = String(field.id);
     const otherKey = otherFieldKey(id);
-    const raw = out[id];
     const otherText = String(out[otherKey] ?? "").trim();
-    if (Array.isArray(raw)) {
-      out[id] = raw.map((v) =>
-        String(v) === String(field.otherOptionValue) && otherText ? otherText : v,
-      );
+
+    if (field.type === "multicheck") {
+      const raw = out[id];
+      if (Array.isArray(raw)) {
+        out[id] = raw.map((v) =>
+          String(v) === String(field.otherOptionValue) && otherText ? otherText : v,
+        );
+      }
+      delete out[otherKey];
+    } else if (field.type === "select" || field.type === "radio") {
+      const raw = out[id];
+      if (String(raw) === String(field.otherOptionValue) && otherText) {
+        out[id] = otherText;
+      }
+      delete out[otherKey];
     }
-    delete out[otherKey];
   }
   return out;
 }
@@ -73,7 +85,7 @@ function applyMulticheckOtherText(merged, fieldsById) {
 export function buildPayload(formGroupLabel, allValues, stepValues, screens) {
   const merged = { ...allValues, ...stepValues };
   const fieldsById = collectFieldsById(screens);
-  const forSerialization = applyMulticheckOtherText(merged, fieldsById);
+  const forSerialization = applyOtherFreeText(merged, fieldsById);
   const fieldOptionMaps = buildFieldOptionMaps(screens);
   const serializedResponses = Object.fromEntries(
     Object.entries(forSerialization).map(([key, value]) => [

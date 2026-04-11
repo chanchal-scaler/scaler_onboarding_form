@@ -1,5 +1,6 @@
 import { Controller } from "react-hook-form";
 import { otherFieldKey } from "../utils/formValues";
+import { getRegisterOptionsForValidationType } from "../utils/validationType";
 
 function Message({ error }) {
   return error ? <p className="error">{error.message}</p> : null;
@@ -14,12 +15,28 @@ function validateMulticheck(field, value) {
   return true;
 }
 
-function SelectField({ field, register, error }) {
+function selectOtherPlaceholder(field) {
+  const label = String(field.label ?? "").trim();
+  if (/current job role/i.test(label)) return "Enter your role";
+  return field.placeholder || "Please specify";
+}
+
+function SelectField({ field, register, watch, errors, error }) {
+  const selected = watch(field.id);
+  const otherKey = field.otherOptionValue != null ? otherFieldKey(field.id) : null;
+  const showOther =
+    field.otherOptionValue != null &&
+    selected != null &&
+    selected !== "" &&
+    String(selected) === String(field.otherOptionValue);
+  const otherError = otherKey ? errors?.[otherKey] : null;
+  const otherPlaceholder = selectOtherPlaceholder(field);
+
   return (
     <>
       <select
         id={field.id}
-        {...register(field.id, { required: field.required ? "This field is required." : false })}
+        {...register(field.id, getRegisterOptionsForValidationType(field))}
       >
         <option value="">Select an option</option>
         {field.options.map((option) => (
@@ -28,12 +45,33 @@ function SelectField({ field, register, error }) {
           </option>
         ))}
       </select>
+      {showOther && otherKey ? (
+        <div className="multicheck-other-input select-other-input">
+          <input
+            type="text"
+            id={otherKey}
+            placeholder={otherPlaceholder}
+            autoComplete="organization-title"
+            aria-label={otherPlaceholder}
+            {...register(otherKey, {
+              validate: (v) => {
+                if (!showOther) return true;
+                if (String(v).trim()) return true;
+                return /current job role/i.test(String(field.label ?? "").trim())
+                  ? "Please enter your role."
+                  : "Please specify.";
+              },
+            })}
+          />
+        </div>
+      ) : null}
       <Message error={error} />
+      <Message error={otherError} />
     </>
   );
 }
 
-function ChoiceField({ field, register, watch, error, type }) {
+function ChoiceField({ field, register, watch, errors, error, type }) {
   const className = type === "checkbox" ? "checkbox-group" : "radio-group";
   const itemClass = type === "checkbox" ? "checkbox-option" : "radio-option";
   const selectedValues = watch(field.id);
@@ -43,6 +81,15 @@ function ChoiceField({ field, register, watch, error, type }) {
     type === "checkbox"
       ? { validate: (v) => validateMulticheck(field, v) }
       : { required: field.required ? "Please select one option." : false };
+  const otherKey =
+    type === "radio" && field.otherOptionValue != null ? otherFieldKey(field.id) : null;
+  const showRadioOther =
+    type === "radio" &&
+    field.otherOptionValue != null &&
+    asSingle === String(field.otherOptionValue);
+  const otherError = otherKey ? errors?.[otherKey] : null;
+  const otherPlaceholder = selectOtherPlaceholder(field);
+
   return (
     <>
       <div className={className}>
@@ -64,7 +111,28 @@ function ChoiceField({ field, register, watch, error, type }) {
           </label>
         ))}
       </div>
+      {showRadioOther && otherKey ? (
+        <div className="multicheck-other-input select-other-input">
+          <input
+            type="text"
+            id={otherKey}
+            placeholder={otherPlaceholder}
+            autoComplete="organization-title"
+            aria-label={otherPlaceholder}
+            {...register(otherKey, {
+              validate: (v) => {
+                if (!showRadioOther) return true;
+                if (String(v).trim()) return true;
+                return /current job role/i.test(String(field.label ?? "").trim())
+                  ? "Please enter your role."
+                  : "Please specify.";
+              },
+            })}
+          />
+        </div>
+      ) : null}
       <Message error={error} />
+      <Message error={otherError} />
     </>
   );
 }
@@ -185,9 +253,12 @@ function MissionMulticheckField({ field, control, watch, register, error }) {
 export function FieldRenderer({ field, register, watch, errors, control }) {
   const error = errors[field.id];
 
-  if (field.type === "select") return <SelectField field={field} register={register} error={error} />;
+  if (field.type === "select")
+    return <SelectField field={field} register={register} watch={watch} errors={errors} error={error} />;
   if (field.type === "radio")
-    return <ChoiceField field={field} register={register} watch={watch} error={error} type="radio" />;
+    return (
+      <ChoiceField field={field} register={register} watch={watch} errors={errors} error={error} type="radio" />
+    );
 
   if (field.type === "multicheck" && field.choiceLayout === "mission_cards" && control) {
     return (
@@ -205,7 +276,9 @@ export function FieldRenderer({ field, register, watch, errors, control }) {
     return <MulticheckField field={field} register={register} watch={watch} error={error} />;
   }
   if (field.type === "multicheck")
-    return <ChoiceField field={field} register={register} watch={watch} error={error} type="checkbox" />;
+    return (
+      <ChoiceField field={field} register={register} watch={watch} errors={errors} error={error} type="checkbox" />
+    );
   if (field.type === "textarea") {
     return (
       <>
@@ -213,7 +286,7 @@ export function FieldRenderer({ field, register, watch, errors, control }) {
           id={field.id}
           rows={4}
           placeholder={field.placeholder}
-          {...register(field.id, { required: field.required ? "This field is required." : false })}
+          {...register(field.id, getRegisterOptionsForValidationType(field))}
         />
         <Message error={error} />
       </>
@@ -225,7 +298,7 @@ export function FieldRenderer({ field, register, watch, errors, control }) {
         id={field.id}
         type={field.type}
         placeholder={field.placeholder}
-        {...register(field.id, { required: field.required ? "This field is required." : false })}
+        {...register(field.id, getRegisterOptionsForValidationType(field))}
       />
       <Message error={error} />
     </>

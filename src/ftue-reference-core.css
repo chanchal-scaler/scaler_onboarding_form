@@ -197,20 +197,6 @@ textarea {
   content: none;
 }
 
-.welcome-wheel {
-  position: absolute;
-  right: 20px;
-  bottom: 14px;
-  width: clamp(280px, 22vw, 420px);
-  pointer-events: none;
-}
-
-.welcome-wheel img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 #screen-1 .topbar {
   margin-bottom: 0;
   border-bottom: 0;
@@ -940,6 +926,73 @@ h1 {
 }
 
 @media (max-width: 760px) {
+  /* Full-bleed shell: remove desktop horizontal gutters */
+  .screen {
+    padding: 0;
+  }
+
+  .content,
+  .welcome-content {
+    padding: max(18px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+      max(22px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .form-content {
+    padding: max(16px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px))
+      max(20px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px));
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 9vw, 44px);
+    max-width: none;
+  }
+
+  .welcome-stage .hero-title {
+    max-width: none;
+  }
+
+  .quote-text {
+    font-size: clamp(22px, 6vw, 32px);
+  }
+
+  .narrative-head {
+    margin-bottom: 22px;
+    gap: 10px;
+  }
+
+  .narrative-head .section-title {
+    font-size: clamp(24px, 6.5vw, 36px);
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .form-shell,
+  .hero-panel,
+  .card,
+  .choice-card,
+  .report-preview {
+    padding: 16px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .field textarea {
+    min-height: 100px;
+  }
+
+  .field label {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+
   #screen-1 .welcome-content {
     background:
       linear-gradient(var(--border-light), var(--border-light)) 0 88px / 100% 1px no-repeat;
@@ -947,12 +1000,6 @@ h1 {
 
   #screen-1 .welcome-content::after {
     content: none;
-  }
-
-  .welcome-wheel {
-    width: 220px;
-    right: 10px;
-    bottom: 8px;
   }
 
   .topbar,

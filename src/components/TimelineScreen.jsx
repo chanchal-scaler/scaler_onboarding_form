@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { publicAsset } from "../utils/publicAsset";
 
 const ROADMAP_EMAIL_HREF =
@@ -140,6 +140,9 @@ const milestones = [
   },
 ];
 
+/** Viewport anchor (fraction from top) used to pick which step is "current" while scrolling */
+const ROADMAP_VIEWPORT_ANCHOR = 0.42;
+
 function RoadmapOneLiner({ children }) {
   return <p className="roadmap-one-liner">{children}</p>;
 }
@@ -165,6 +168,46 @@ export function TimelineScreen({
   secondaryCtaText = "Questions? Request a callback",
 }) {
   const [openId, setOpenId] = useState(null);
+  const [activeScrollId, setActiveScrollId] = useState(milestones[0].id);
+  const stepRefs = useRef([]);
+
+  useEffect(() => {
+    const updateActiveFromScroll = () => {
+      const steps = stepRefs.current.filter(Boolean);
+      if (steps.length === 0) return;
+      const anchorY = window.innerHeight * ROADMAP_VIEWPORT_ANCHOR;
+      let bestEl = null;
+      let bestDist = Infinity;
+      for (const el of steps) {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) continue;
+        const midY = r.top + r.height / 2;
+        const d = Math.abs(midY - anchorY);
+        if (d < bestDist) {
+          bestDist = d;
+          bestEl = el;
+        }
+      }
+      if (!bestEl) return;
+      const id = bestEl.getAttribute("data-milestone-id");
+      if (id) setActiveScrollId((prev) => (prev === id ? prev : id));
+    };
+
+    let raf = 0;
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(updateActiveFromScroll);
+    };
+
+    updateActiveFromScroll();
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
+  }, []);
 
   const toggleStep = (id) => {
     const step = milestones.find((m) => m.id === id);
@@ -194,7 +237,8 @@ export function TimelineScreen({
             {milestones.map((milestone, index) => {
               const isOpen = milestone.expandable && openId === milestone.id;
               const nodeActive =
-                (milestone.expandable && openId === milestone.id) || (openId === null && index === 0);
+                (milestone.expandable && openId === milestone.id) ||
+                (openId === null && activeScrollId === milestone.id);
 
               const body = (
                 <>
@@ -246,6 +290,10 @@ export function TimelineScreen({
               return (
                 <article
                   key={milestone.id}
+                  ref={(el) => {
+                    stepRefs.current[index] = el;
+                  }}
+                  data-milestone-id={milestone.id}
                   className={`roadmap-step ${milestone.side} ${milestone.expandable ? "roadmap-step--expandable" : "roadmap-step--static"} ${isOpen ? "is-open" : ""}`}
                   data-expandable={milestone.expandable ? "true" : undefined}
                   role={milestone.expandable ? "button" : undefined}

@@ -1,3 +1,5 @@
+import { normalizeValidationType } from "./utils/validationType";
+
 function toArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -160,6 +162,8 @@ function normalizeField(field, index) {
   const choiceLayout = normalizeChoiceLayout(meta);
   const maxSelections = normalizeMaxSelections(meta, field);
 
+  const validationType = normalizeValidationType(meta.validation_type);
+
   return {
     id: String(id),
     label: field.label || field.title || field.question || `Field ${index + 1}`,
@@ -181,6 +185,7 @@ function normalizeField(field, index) {
     options,
     layoutWidth,
     layoutSpan,
+    validationType,
   };
 }
 
