@@ -1,34 +1,79 @@
 import { publicAsset } from "../utils/publicAsset";
+import { getLinkedinAlumni } from "../utils/linkedinAlumni";
 
-const alumni = [
-  {
-    name: "Mayank Chauhan",
-    role: "SDE 2 at CYware",
-    before: "Fresher",
-    company: "CYware",
-    photo: "/assets/alumni/mayank-chauhan.jpeg",
-    logo: "/assets/alumni/logos/cyware.png",
-  },
-  {
-    name: "Saurabh Singh",
-    role: "SDE - Full Stack @ Lido",
-    before: "Fresher",
-    company: "Lido",
-    photo: "/assets/alumni/saurabh-singh.jpeg",
-    logo: "/assets/alumni/logos/lido.jpeg",
-  },
-  {
-    name: "Siddharth Aadarsh",
-    role: "Backend Developer @ HealthifyMe",
-    before: "Fresher",
-    company: "HealthifyMe",
-    photo: "/assets/alumni/siddharth-aadarsh.jpeg",
-    logo: "/assets/alumni/logos/healthifyme.png",
-  },
-];
+function normalizeKey(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
 
-export function FinalLetterScreen({ user, onContinue, continueDisabled = false }) {
+function readFormValueByKey(allValues, matchers = []) {
+  if (!allValues || typeof allValues !== "object") return "";
+  const entries = Object.entries(allValues);
+  for (const [rawKey, rawValue] of entries) {
+    const key = normalizeKey(rawKey);
+    if (matchers.some((matcher) => matcher(key))) {
+      return String(rawValue ?? "");
+    }
+  }
+  return "";
+}
+
+function getFieldLabelValue(field, rawValue) {
+  if (rawValue == null) return "";
+  if (!Array.isArray(field?.options) || field.options.length === 0) return String(rawValue);
+  const match = field.options.find((opt) => String(opt?.value) === String(rawValue));
+  return String(match?.label ?? rawValue);
+}
+
+function readFormValueByFieldLabel(allValues, screens, expectedLabels = []) {
+  if (!allValues || typeof allValues !== "object" || !Array.isArray(screens)) return "";
+  const labels = new Set(expectedLabels.map((label) => normalizeKey(label)));
+  for (const screen of screens) {
+    for (const field of screen?.fields || []) {
+      if (!labels.has(normalizeKey(field?.label))) continue;
+      const rawValue = allValues[field.id];
+      if (rawValue == null || rawValue === "") continue;
+      return getFieldLabelValue(field, rawValue);
+    }
+  }
+  return "";
+}
+
+function resolveTotalExperience(allValues, screens) {
+  const byFieldLabel = readFormValueByFieldLabel(allValues, screens, [
+    "Total experience (Full Time)",
+    "Total experience",
+  ]);
+  if (byFieldLabel) return byFieldLabel;
+  return readFormValueByKey(allValues, [
+    (key) => key === "total experience (full time)",
+    (key) => key === "total experience",
+    (key) => key.includes("total experience") && key.includes("full time"),
+  ]);
+}
+
+function resolveMajorityExperience(allValues, screens) {
+  const byFieldLabel = readFormValueByFieldLabel(allValues, screens, [
+    "What has majority of your experience been in?",
+    "Majority experience",
+  ]);
+  if (byFieldLabel) return byFieldLabel;
+  return readFormValueByKey(allValues, [
+    (key) => key === "what has majority of your experience been in?",
+    (key) => key === "majority experience",
+    (key) => key.includes("majority of your experience"),
+  ]);
+}
+
+export function FinalLetterScreen({ user, allValues, screens, onContinue, continueDisabled = false }) {
   const userName = user?.name || "Learner";
+  const totalExperience = resolveTotalExperience(allValues, screens);
+  const majorityExperience = resolveMajorityExperience(allValues, screens);
+  const matchedAlumni = getLinkedinAlumni(totalExperience, majorityExperience);
+  const alumniPresent = matchedAlumni.length > 0;
+  const alumni = matchedAlumni;
 
   return (
     <section className="screen default-screen shell page letter-screen">
@@ -38,33 +83,35 @@ export function FinalLetterScreen({ user, onContinue, continueDisabled = false }
           {userName}, your journey to staying relevant, starts now
         </h1>
         <p className="subheadline">(50+ learners have already enrolled, with similar profile like you)</p>
-        <p className="subheading">Scaler alumni who had a similar journey as yours</p>
+        {alumniPresent && <p className="subheading">Scaler alumni who had a similar journey as yours</p>}
 
-        <div className="alumni-strip">
-          {alumni.map((card) => (
-            <article key={card.name} className="alumni-card">
-              <div className="alumni-top">
-                <img className="alumni-photo" src={publicAsset(card.photo)} alt={card.name} />
-                <div className="alumni-meta">
-                  <div className="alumni-name">{card.name}</div>
-                  <div className="alumni-role">{card.role}</div>
-                </div>
-              </div>
-              <div className="alumni-journey">
-                <div className="journey-row">
-                  <div className="journey-label">Before Scaler</div>
-                  <div className="journey-value">{card.before}</div>
-                </div>
-                <div className="journey-row">
-                  <div className="journey-label">After Scaler</div>
-                  <div className="org-logo">
-                    <img src={publicAsset(card.logo)} alt={card.company} />
+        {alumniPresent && (
+          <div className="alumni-strip">
+            {alumni.map((card) => (
+              <article key={card.name} className="alumni-card">
+                <div className="alumni-top">
+                  <img className="alumni-photo" src={publicAsset(card.photo)} alt={card.name} />
+                  <div className="alumni-meta">
+                    <div className="alumni-name">{card.name}</div>
+                    <div className="alumni-role">{card.role}</div>
                   </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="alumni-journey">
+                  <div className="journey-row">
+                    <div className="journey-label">Before Scaler</div>
+                    <div className="journey-value">{card.before}</div>
+                  </div>
+                  <div className="journey-row">
+                    <div className="journey-label">After Scaler</div>
+                    <div className="org-logo">
+                      <img src={publicAsset(card.logo)} alt={card.company} />
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         <section className="letter-card letter-card--mission">
           <h2 className="insight-section-title">Scaler&apos;s mission and your future with AI</h2>

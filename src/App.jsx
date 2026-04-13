@@ -159,6 +159,7 @@ function App() {
       <FinalLetterScreen
         user={user}
         allValues={onboarding.allValues}
+        screens={screens}
         onContinue={handleLetterContinue}
         continueDisabled={false}
       />
