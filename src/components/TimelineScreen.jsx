@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { publicAsset } from "../utils/publicAsset";
 
+const communityCarouselSlides = [
+  { src: "/assets/roadmap/community.jpeg", alt: "Community event highlight 1" },
+  { src: "/assets/roadmap/community-2.jpg", alt: "Community event highlight 2" },
+  { src: "/assets/roadmap/community-3.jpeg", alt: "Community event highlight 3" },
+  { src: "/assets/roadmap/community-4.jpeg", alt: "Community event highlight 4" },
+  { src: "/assets/roadmap/community-5.jpeg", alt: "Community event highlight 5" },
+  { src: "/assets/roadmap/community-6.jpeg", alt: "Community event highlight 6" },
+];
+
 /** Synced with pipInstallish/Ftue_final roadmap.html (main timeline content). */
 const milestones = [
   {
@@ -54,24 +63,27 @@ const milestones = [
     expandable: false,
   },
   {
+    id: "month-2-resume",
+    time: "Month 2",
+    title: "Build your resume",
+    copy:
+      "99.7% of ATS recruiters use keywords to search, making more than 75% of resumes invisible. Build your resume on Career Hub with AI-optimized, battle-tested templates reviewed by industry experts who've hired at top companies.",
+    side: "left",
+    expandable: false,
+  },
+  {
     id: "month-1-community",
     time: "Month 1",
     title: "Join community events",
     copy:
       "Referrals. Inside intel. Real talk from engineers already inside top companies. Your city community is where careers quietly get made — but only if you show up.",
-    side: "left",
+    side: "right",
     expandable: true,
     image: "/assets/roadmap/community.jpeg",
     imageTag: "Community event preview",
     expandTitle: "Join community events",
-  },
-  {
-    id: "month-2-mentor",
-    time: "Month 2",
-    title: "Mentor check-in",
-    copy: "Review progress and help resolve any concerns or feedback regarding your course.",
-    side: "right",
-    expandable: false,
+    carouselSlides: communityCarouselSlides,
+    carouselCaption: "Community event gallery",
   },
   {
     id: "month-3-mock",
@@ -107,21 +119,12 @@ const milestones = [
     expandable: false,
   },
   {
-    id: "month-9-resume",
-    time: "Month 9",
-    title: "Build Your Resume",
-    copy:
-      "ATS systems quietly reject most resumes before a human ever sees them. AI-optimized, battle-tested templates, reviewed by people who've hired at top companies.",
-    side: "left",
-    expandable: false,
-  },
-  {
     id: "month-10-portfolio",
     time: "Month 10",
     title: "Real world portfolio project",
     copy:
       "Use learnings for a practical project. Production-grade systems that look like real engineering work on your resume.",
-    side: "right",
+    side: "left",
     expandable: false,
     chips: [{ label: "AI literacy" }],
   },
@@ -130,7 +133,7 @@ const milestones = [
     time: "Month 10",
     title: "Congrats, now you are industry ready!",
     copy: "Clear skill certifications and be eligible to apply for all the roles.",
-    side: "left",
+    side: "right",
     expandable: false,
     chips: [
       { label: "AI infused UI engineer", variant: "ai" },
@@ -154,7 +157,7 @@ const milestones = [
     title: "Placement assistance begins",
     copy:
       "Clear skill certification rounds at end of core modules and start applying to jobs from over 900+ hiring partners.",
-    side: "right",
+    side: "left",
     expandable: true,
     image: "/assets/roadmap/4th-milestone.png",
     imageTag: "Careers Hub preview",
@@ -166,7 +169,7 @@ const milestones = [
     title: "Additional AI electives",
     copy:
       "Eligible for GenAI, Product management with AI etc. (Please check your brochures for all updated electives for your programme)",
-    side: "left",
+    side: "right",
     expandable: false,
   },
   {
@@ -175,7 +178,7 @@ const milestones = [
     title: "Your Life long learning partner",
     copy:
       "You will have lifetime access to live and existing course material where we are keeping you updated with latest advancements in tech, so your learning continues.",
-    side: "right",
+    side: "left",
     expandable: false,
   },
 ];
@@ -309,16 +312,43 @@ export function TimelineScreen({ primaryCtaText = "Start this journey" }) {
                       <p className="roadmap-expand-label">Milestone walkthrough</p>
                       <h3 className="roadmap-expand-title">{milestone.expandTitle || milestone.title}</h3>
                       <div className="roadmap-expand-gallery">
-                        <div className="roadmap-placeholder roadmap-placeholder--image">
-                          <img
-                            src={publicAsset(milestone.image)}
-                            alt={milestone.title}
-                            className="roadmap-expand-image"
-                          />
-                          {milestone.imageTag ? (
-                            <span className="roadmap-image-tag">{milestone.imageTag}</span>
-                          ) : null}
-                        </div>
+                        {milestone.carouselSlides?.length ? (
+                          <div className="roadmap-community-carousel">
+                            <div className="roadmap-community-carousel-viewport">
+                              <div className="roadmap-community-carousel-track">
+                                {[...milestone.carouselSlides, ...milestone.carouselSlides].map(
+                                  (slide, slideIndex) => (
+                                    <div
+                                      className="roadmap-community-slide"
+                                      key={`${milestone.id}-${slide.src}-${slideIndex}`}
+                                    >
+                                      <img
+                                        src={publicAsset(slide.src)}
+                                        alt={slide.alt}
+                                        className="roadmap-community-slide-image"
+                                        loading="lazy"
+                                      />
+                                    </div>
+                                  ),
+                                )}
+                              </div>
+                            </div>
+                            <p className="roadmap-community-carousel-caption">
+                              {milestone.carouselCaption}
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="roadmap-placeholder roadmap-placeholder--image">
+                            <img
+                              src={publicAsset(milestone.image)}
+                              alt={milestone.title}
+                              className="roadmap-expand-image"
+                            />
+                            {milestone.imageTag ? (
+                              <span className="roadmap-image-tag">{milestone.imageTag}</span>
+                            ) : null}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
