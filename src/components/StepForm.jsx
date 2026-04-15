@@ -2,6 +2,15 @@ import { Fragment } from "react";
 import { FieldRenderer } from "./FieldRenderer";
 import { displayLabel } from "../utils/displayCase";
 
+function getSubmitErrorMessage(submitError) {
+  const raw = String(submitError?.message || submitError || "").trim();
+  if (!raw) return "Something went wrong. Please try again later.";
+  if (/(captcha|recaptcha|turnstile)/i.test(raw)) {
+    return "Recaptcha verification failed, please refresh & try again";
+  }
+  return "Something went wrong. Please try again later.";
+}
+
 export function StepForm({
   screen,
   formState,
@@ -154,7 +163,7 @@ export function StepForm({
 
   const stepFooter = (
     <>
-      {submitError && <p className="error">Submission failed: {String(submitError)}</p>}
+      {submitError && <p className="error">{getSubmitErrorMessage(submitError)}</p>}
       {isSubmitted && <p className="success">Form submitted successfully.</p>}
     </>
   );

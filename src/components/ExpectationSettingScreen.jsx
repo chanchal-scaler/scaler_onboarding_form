@@ -164,7 +164,7 @@ export function ExpectationSettingScreen({
   const handleSignOff = useCallback(() => {
     if (turnstileMissing) {
       window.alert(
-        "Turnstile is not configured. Set VITE_TURNSTILE_SITE_KEY in your environment, or use VITE_EXPECTATION_SKIP_CAPTCHA=true for local dev only.",
+        "Captcha missing! Please verify or refresh the page and try again.",
       );
       return;
     }
@@ -173,7 +173,7 @@ export function ExpectationSettingScreen({
       return;
     }
     if (!turnstileToken) {
-      window.alert("Please verify captcha!");
+      window.alert("Captcha missing! Please verify or refresh the page and try again.");
       turnstileRef.current?.reset();
       return;
     }

@@ -33,13 +33,7 @@ export function useOnboardingForm({ screens, formGroupLabel }) {
     const payload = buildPayload(formGroupLabel, allValues, stepValues, screens);
     const finalValues = { ...allValues, ...stepValues };
     setAllValues(finalValues);
-
-    try {
-      await submitMutation.mutateAsync(payload);
-    } catch {
-      // Submission failure is non-blocking for marking the flow complete in the UI.
-    }
-
+    await submitMutation.mutateAsync(payload);
     setIsCompleted(true);
   });
 

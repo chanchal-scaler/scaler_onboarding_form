@@ -429,6 +429,10 @@
   font-size: 14px;
 }
 
+.error {
+  color: #b42318;
+}
+
 .success {
   color: var(--muted);
 }
