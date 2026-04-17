@@ -1,0 +1,21 @@
+event_name,property_name,property_type,known_values,example_value,value_source,notes
+Screen View,screen_key,string enum,"loading|auth_error|error|awaiting_expectation_branch|home|form|letter|expectation|timeline",form,src/analytics/mixpanel.js (SCREEN_VIEW_LABELS),Derived from app phase transitions
+Screen View,screen_name,string enum,"Loading|Auth Error|Error|Awaiting Expectation|Home|Form|Welcome Letter|Enrollment Agreement|Roadmap",Form,src/analytics/mixpanel.js (SCREEN_VIEW_LABELS),Mapped from screen_key
+Screen View,form_screen_id,string (dynamic),"(dynamic from onboarding screen IDs)",personal_details,src/App.jsx + onboarding API data,Only sent when screen_key=form
+Screen View,form_step_index,number (dynamic),"(dynamic integer >= 0)",2,src/App.jsx,Only sent when screen_key=form
+Screen View,form_step_name,string (dynamic),"(dynamic from onboarding.currentScreen.stepName)",Education Details,src/App.jsx,Only sent when screen_key=form and step name exists
+Screen View,product_name,string constant,"on boarding form v3",on boarding form v3,src/analytics/mixpanel.js,Also sent globally by track wrapper and as super-property
+Screen View,email,string (dynamic),"(user email when available)",learner@example.com,src/analytics/mixpanel.js,Injected by track wrapper if user context is registered
+Screen View,user_email,string (dynamic),"(user email when available)",learner@example.com,src/analytics/mixpanel.js,Injected by track wrapper if user context is registered
+Button Click,track_id,string enum (known),"home_start_onboarding|letter_continue_to_roadmap|expectation_signature_modal_close|expectation_signature_modal_adopt|expectation_header_back|expectation_open_signature_modal|expectation_edit_signature|expectation_sign_off_submit|expectation_continue_to_letter|roadmap_primary_cta_external",home_start_onboarding,src/components/* (data-track-id),Only present if clicked element has data-track-id
+Button Click,button_identifier,string (derived),"(track_id OR label OR unknown)",expectation_sign_off_submit,src/analytics/buttonClickTracking.js,Fallback order: track_id > label > unknown
+Button Click,label,string (dynamic),"(visible/aria label text, max 200 chars)",Continue,src/analytics/buttonClickTracking.js,May be absent
+Button Click,tag,string enum (likely),"button|a",button,src/analytics/buttonClickTracking.js,Derived from clicked element tagName
+Button Click,type,string enum (dynamic),"button|submit|reset",submit,src/analytics/buttonClickTracking.js,Only present when element has type attribute
+Button Click,href,string (dynamic URL/path),"(anchor href values)",https://example.com/roadmap,src/analytics/buttonClickTracking.js,Only present for anchor clicks
+Button Click,disabled,boolean,"true|false",false,src/analytics/buttonClickTracking.js,From element.disabled
+Button Click,app_phase,string enum,"loading|auth_error|error|awaiting_expectation_branch|home|form|letter|expectation|timeline",form,src/App.jsx + src/analytics/buttonClickTracking.js,Read from document root data-app-phase
+Button Click,aria-label,string (dynamic),"(aria-label value when present)",Continue to Roadmap,src/analytics/buttonClickTracking.js,May be absent
+Button Click,product_name,string constant,"on boarding form v3",on boarding form v3,src/analytics/mixpanel.js,Injected by track wrapper and super-property
+Button Click,email,string (dynamic),"(user email when available)",learner@example.com,src/analytics/mixpanel.js,Injected by track wrapper if user context is registered
+Button Click,user_email,string (dynamic),"(user email when available)",learner@example.com,src/analytics/mixpanel.js,Injected by track wrapper if user context is registered

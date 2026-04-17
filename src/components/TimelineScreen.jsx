@@ -2,12 +2,32 @@ import { useEffect, useRef, useState } from "react";
 import { publicAsset } from "../utils/publicAsset";
 
 const communityCarouselSlides = [
-  { src: "/assets/roadmap/community.jpeg", alt: "Community event highlight 1" },
-  { src: "/assets/roadmap/community-2.jpg", alt: "Community event highlight 2" },
-  { src: "/assets/roadmap/community-3.jpeg", alt: "Community event highlight 3" },
-  { src: "/assets/roadmap/community-4.jpeg", alt: "Community event highlight 4" },
-  { src: "/assets/roadmap/community-5.jpeg", alt: "Community event highlight 5" },
-  { src: "/assets/roadmap/community-6.jpeg", alt: "Community event highlight 6" },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/008/original/1.jpeg?1776406756", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/026/original/2.jpeg?1776407883", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/029/original/7_%281%29.jpeg?1776407912", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/032/original/bangalore_meetup.jpeg?1776407933", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/033/original/BLR_feb_1.jpeg?1776407947", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/035/original/Chen_2_feb.jpeg?1776407968", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/036/original/Chen_Feb_1_.jpeg?1776407989", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/037/original/Del_feb_1.jpg?1776408005", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/038/original/Del_feb_2.jpg?1776408027", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/040/original/Delhi_Donation_drive.jpeg?1776408086", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/041/original/Gurgaon_%281%29.jpeg?1776408099", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/043/original/Hyd_feb_1.jpg?1776408162", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/045/original/Hyd_feb_2.jpg?1776408179", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/048/original/Hyderabad.jpeg?1776408197", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/050/original/IMG-20221015-WA0144.jpg?1776408311", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/051/original/IMG-20221016-WA0047.jpg?1776408329", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/052/original/IMG-20221029-WA0088.jpg?1776408358", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/053/original/IMG-20221126-WA0076.jpg?1776408382", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/054/original/IMG-20221225-WA0248.jpg?1776408407", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/056/original/Mumbai_pune.jpeg?1776408434", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/057/original/Untitled_%281%29.jpeg?1776408460", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/058/original/WhatsApp_Image_2022-12-04_at_9.41.45_AM.jpeg?1776408486", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/070/original/community-3.jpeg?1776410569", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/071/original/community-5.jpeg?1776410639", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/072/original/community-6.jpeg?1776410687", alt: "Community Highlight " },
+  { src: "https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/191/073/original/community-2.jpg?1776410865", alt: "Community Highlight " },
 ];
 
 /** Synced with pipInstallish/Ftue_final roadmap.html (main timeline content). */
@@ -323,8 +343,8 @@ export function TimelineScreen({ primaryCtaText = "Start this journey" }) {
                                       key={`${milestone.id}-${slide.src}-${slideIndex}`}
                                     >
                                       <img
-                                        src={publicAsset(slide.src)}
-                                        alt={slide.alt}
+                                        src={slide.src}
+                                        alt={`${slide.alt} slide ${slideIndex + 1}`}
                                         className="roadmap-community-slide-image"
                                         loading="lazy"
                                       />

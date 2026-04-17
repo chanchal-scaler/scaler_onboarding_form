@@ -1268,7 +1268,7 @@
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: roadmapCommunityMarquee 32s linear infinite;
+  animation: roadmapCommunityMarquee 200s linear infinite;
 }
 
 .roadmap-community-slide {
